@@ -123,7 +123,7 @@ void move_forward(unsigned long steps) {
       digitalWrite(STEP_BR, HIGH);
       digitalWrite(STEP_FR, HIGH);
       digitalWrite(STEP_BL, HIGH);
-      delayMicroseconds(motor_delay);                            //Was a 500 ms delay
+      delayMicroseconds(motor_delay);                            //Was a 500 microsecond delay
       digitalWrite(STEP_FL, LOW);
       digitalWrite(STEP_BR, LOW);
       digitalWrite(STEP_FR, LOW);
