@@ -5,10 +5,14 @@ class Simulator : Controller {
     public:
 
     double x, y;
+
     // Heading is measured in radians counter-clockwise from the x-axis.
     double heading;
+
     // Steering radius of curvature (steering left = positive)
-    double steer = 0;
+    double steer_curvature = 0;
+
+    Side forward_side = FRONT;
 
     double step_distance = 0.1;
     
@@ -17,21 +21,23 @@ class Simulator : Controller {
     }
 
     void move_increment() {
-        // x_prime and y_prime represents the motion in the robot's initial frame
-        // of reference, where the x-axis is the direciton the robot was facing.
-        double x_prime = steer * sin(step_distance / steer);
-        double y_prime = steer * (1 - cos(step_distance / steer));
+        // x_prime is the distance the robot moved forward (relative to its initial position).
+        // y_prime is the distance the robot moved left (relative to its initial position).
+        double r = 1/steer_curvature;
+        double x_prime = r * cos(step_distance / r);
+        double y_prime = r * (1 - sin(step_distance / r));
         // Rotate (clockwise) into the global coordinate system.
         x += cos(-heading) * x_prime - sin(-heading) * y_prime;
         y += sin(-heading) * x_prime + cos(-heading) * y_prime;
     }
 
-    void set_steer(double value) {
-        steer = value;
+    void set_steer_curvature(double value) {
+        steer_curvature = value;
     }
 
-    void change_direction(Side side) {
-        // TODO
+    void change_forward_side(Side side) {
+        heading += (side - forward_side)*3.14159/180;
+        forward_side = side;
     }
     
     void ir_reads_black(IRSensor sensor) {
