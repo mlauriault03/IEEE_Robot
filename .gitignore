@@ -1,0 +1,3 @@
+*.swp   # Ignore vim swap files
+*.exe   # Ignore executables
+
