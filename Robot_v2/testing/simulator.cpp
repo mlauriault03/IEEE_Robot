@@ -25,8 +25,8 @@ void Simulator::move_increment() {
         dy_prime = (1 - sin(theta)) / steer_curvature;
     }
     // Rotate (clockwise) into the global coordinate system.
-    x += cos(-heading) * dx_prime - sin(-heading) * dy_prime;
-    y += sin(-heading) * dx_prime + cos(-heading) * dy_prime;
+    x += cos(heading) * dx_prime - sin(heading) * dy_prime;
+    y += sin(heading) * dx_prime + cos(heading) * dy_prime;
     heading += theta;
 
     // Record new location

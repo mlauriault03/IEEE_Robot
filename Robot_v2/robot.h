@@ -25,9 +25,8 @@ public:
     Robot(Vehicle &v) : vehicle(v) {}
 
     void run() {
-        // Testing: Take 100 steps forward
-        vehicle.set_steer_curvature(0.3);
-        for (int i = 0; i < 100; i++) {
+        // Testing: Take a fixed number of steps forward
+        for (int i = 0; i < 1000; i++) {
             vehicle.move_increment();
         }
     }
