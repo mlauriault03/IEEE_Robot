@@ -17,23 +17,25 @@ class Simulator : public VehicleInterface {
 
     Side forward_side = FRONT;
 
-    double step_distance = 0.1;
+    double step_distance = 0.01;    // On the robot, 1 step is about 1.2 inches
 
     // The positions of the infrared sensors WRT the robot's center.
     // x increases toward the front,  and y increases toward the left.
-    double ir_bl_x = -10.0;
-    double ir_bl_y = 1.0;
-    double ir_br_x = -10.0;
-    double ir_br_y = -1.0;
+    double ir_fl_x = 5.0;
+    double ir_fl_y = 1.0;
+    double ir_fr_x = 5.0;
+    double ir_fr_y = -1.0;
     double ir_sf_x = 1.0;
-    double ir_sf_y = 10.0;
+    double ir_sf_y = 5.0;
     double ir_sb_x = -1.0;
-    double ir_sb_y = 10.0;
+    double ir_sb_y = 5.0;
 
     double stripe_width = 2.0;
 
+
 public:
     std::vector<std::pair<double, double>> location_history;
+    std::pair<double, double> sensor_location(IRSensor sensor);
 
     void set_position(double x, double y, double heading);
     

@@ -1,4 +1,5 @@
 #include <cmath>
+#include <iostream>     // for debugging
 #include <utility>
 #include "../robot.h"
 #include "simulator.h"
@@ -15,14 +16,14 @@ void Simulator::move_increment() {
     double dx_prime;
     double dy_prime;
     double theta = step_distance * steer_curvature;
-    if (steer_curvature < 0.01) {
+    if (steer_curvature < 0.1) {
         // We're essentially going straight.
         dx_prime = step_distance;
         dy_prime = 0.0;
     }
     else {
-        dx_prime = cos(theta)/steer_curvature;
-        dy_prime = (1 - sin(theta)) / steer_curvature;
+        dx_prime = sin(theta)/steer_curvature;
+        dy_prime = (1 - cos(theta)) / steer_curvature;
     }
     // Rotate (clockwise) into the global coordinate system.
     x += cos(heading) * dx_prime - sin(heading) * dy_prime;
@@ -44,22 +45,29 @@ void Simulator::change_forward_side(Side side) {
 }
 
 bool Simulator::ir_reads_black(IRSensor sensor) {
+    // Check to see if we're on the center stripe.
+    auto point = sensor_location(sensor);
+    return (point.second > 1.0) || (point.second < -1.0);
+}
+
+
+std::pair<double, double> Simulator::sensor_location(IRSensor sensor) {
     // Temporarily change the heading so that forward=FRONT.
     Side old_fwd = forward_side;
     change_forward_side(FRONT);
 
-    // Find (x', y'), the position of the sensor WRT the robot's sensor.
+    // find (x', y'), the position of the sensor wrt the robot's sensor.
     double x_prime;
     double y_prime;
     switch (sensor)
     {
-    case BACK_LEFT:
-        x_prime = ir_bl_x;
-        y_prime = ir_bl_y;
+    case FRONT_LEFT:
+        x_prime = ir_fl_x;
+        y_prime = ir_fl_y;
         break;
-    case BACK_RIGHT:
-        x_prime = ir_br_x;
-        y_prime = ir_br_y;
+    case FRONT_RIGHT:
+        x_prime = ir_fr_x;
+        y_prime = ir_fr_y;
         break;
     case SIDE_FRONT:
         x_prime = ir_sf_x;
@@ -71,14 +79,14 @@ bool Simulator::ir_reads_black(IRSensor sensor) {
         break;
     }
 
-    // Rotate (x', y') into the global coordinate frame.
-    double ir_x = cos(-heading) * x_prime - sin(-heading) * y_prime;
-    double ir_y = sin(-heading) * x_prime + cos(-heading) * y_prime;
+    // rotate (x', y') into the global coordinate frame.
+    double dx = cos(heading) * x_prime - sin(heading) * y_prime;
+    double dy = sin(heading) * x_prime + cos(heading) * y_prime;
 
-    // Restore the "forward" side.
+    // restore the "forward" side.
     change_forward_side(old_fwd);
-
-    // Check to see if we're on the center stripe.
-    return abs(ir_y) < 10;
+    
+    std::pair<double, double> point(dx + x, dy + y);
+    return point;
 }
 

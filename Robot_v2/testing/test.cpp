@@ -4,7 +4,7 @@
 
 int main() {
     Simulator simulator;
-    simulator.set_position(0.0, 1.0, -0.1);
+    simulator.set_position(0.0, -5.995, 0.5);
     Robot<Simulator> robot(simulator);
     robot.run();
     for (auto point : simulator.location_history) {
