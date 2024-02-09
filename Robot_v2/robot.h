@@ -10,7 +10,9 @@ enum IRSensor {FRONT_LEFT, FRONT_RIGHT, SIDE_FRONT, SIDE_BACK};
 
 // This class provides a basic interface to the robot's hardware.
 class VehicleInterface {
-    public:
+    double steer_curvature = 0.0;
+
+public:
     void set_steer_curvature(double radians);  // Set curvature for differential steering. Left is positive.
     void change_forward_side(Side side); // Rotate wheels to change "forward" direction
     void move_increment();               // Move a tiny step forward.
@@ -33,6 +35,8 @@ class Robot {
     Vehicle& vehicle;
     RobotState state = TRACK_NORMAL;
     RobotState prev_state = TRACK_NORMAL;
+
+    // TODO: Refactor most of the logic into functions in robot.cpp
 
     void track_normal() {
         // Drive straight forward.

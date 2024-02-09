@@ -1,6 +1,8 @@
 #include <Servo.h>
 #include <LiquidCrystal_I2C.h>
 
+#include "robot.h"
+
 // motor FR (Front-Right) (23, 24)
 const int STEP_FR = 23;     // PUL+
 const int DIR_FR = 24;      // DIR+
@@ -536,4 +538,18 @@ void loop() {
   move_forward(centimeters_to_steps(2));
   delay(5);
   stop_motion();
+}
+
+/**********Vehicle Interface Class Implementation**********/
+
+void VehicleInterface::set_steer_curvature(double radians) {
+  steer_curvature = radians;
+}
+
+void VehicleInterface::move_increment() {
+  // TODO
+}
+
+void VehicleInterface::ir_reads_black(IRSensor sensor) {
+
 }
