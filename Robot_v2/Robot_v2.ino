@@ -551,5 +551,5 @@ void VehicleInterface::move_increment() {
 }
 
 void VehicleInterface::ir_reads_black(IRSensor sensor) {
-
+  
 }
