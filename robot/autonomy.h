@@ -34,8 +34,6 @@ class Robot {
     RobotState state = TRACK_NORMAL;
     RobotState prev_state = TRACK_NORMAL;
 
-    // TODO: Refactor most of the logic into functions in robot.cpp
-
     void track_normal() {
         // Drive straight forward.
         vehicle.set_steer_curvature(0.0);
