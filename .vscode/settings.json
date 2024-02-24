@@ -1,4 +1,5 @@
 {
+    "arduino.useArduinoCli": true,
     "files.associations": {
         "*.py": "python",
         "format": "cpp",

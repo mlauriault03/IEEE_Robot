@@ -66,7 +66,7 @@ float distance_travelled;
 
 // SETUP FUNCTIONS
 
-void setup_motors() {
+void setup_all_motors() {
     // motor FR
     pinMode(STEP_FR, OUTPUT);             
     pinMode(DIR_FR, OUTPUT);
@@ -108,7 +108,7 @@ void setup_display() {
 }
 
 void setup() {
-  setup_motors();
+  setup_all_motors();
   setup_servos();
   setup_display();
   //Serial.begin(9600);

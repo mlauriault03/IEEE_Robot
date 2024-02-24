@@ -1,8 +1,6 @@
 #ifndef IEEE_ROBOT_2024
 #define IEEE_ROBOT_2024
 
-#include <iostream>
-
 // Enum values represent degrees coutnerclockwise from FRONT.
 enum Side {FRONT=0, LEFT=90, BACK=180, RIGHT=270};
 
