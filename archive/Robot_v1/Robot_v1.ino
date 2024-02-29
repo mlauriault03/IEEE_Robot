@@ -56,11 +56,11 @@ const int round_complete_LED = 46;
 
 
 // CONSTANTS
-int step_mode = 1;                                //microsteps/step  1 is full-step mode
-unsigned int motor_delay = 500;
+int STEP_MODE = 1;                                //microsteps/step  1 is full-step mode
+unsigned int MOTOR_DELAY = 500;
 float pi = 3.14159265358979323846264338;
-int wheel_radius = 2;
-int servo_angle = 30;
+int WHEEL_RADIUS = 2;
+int SERVO_ANGLE = 30;
 float distance_travelled;
 
 
@@ -88,8 +88,8 @@ void setup_all_motors() {
 void setup_servos() {
   FL_BR_Servo.attach(FL_BR_servo_pin, 500, 2500);                     //MG996R - 500 to 2500
   FR_BL_Servo.attach(FR_BL_servo_pin, 500, 2500);
-  FL_BR_Servo.write(servo_angle);
-  FR_BL_Servo.write(180 - servo_angle);                                  //Parallax - 1300 to 1700
+  FL_BR_Servo.write(SERVO_ANGLE);
+  FR_BL_Servo.write(180 - SERVO_ANGLE);                                  //Parallax - 1300 to 1700
   left_sweep_servo.attach(left_sweep_servo_pin, 500, 2500);                  //SG90 - 1000 - 2000
   right_sweep_servo.attach(right_sweep_servo_pin, 1000, 2000);               //Make this one the other kind. Check the pulse width.
   center_sweep_servo.attach(center_sweep_servo_pin, 500, 2500);
@@ -123,14 +123,14 @@ void move_forward(unsigned long steps) {
       digitalWrite(STEP_BR, HIGH);
       digitalWrite(STEP_FR, HIGH);
       digitalWrite(STEP_BL, HIGH);
-      delayMicroseconds(motor_delay);                            //Was a 500 ms delay
+      delayMicroseconds(MOTOR_DELAY);                            //Was a 500 ms delay
       digitalWrite(STEP_FL, LOW);
       digitalWrite(STEP_BR, LOW);
       digitalWrite(STEP_FR, LOW);
       digitalWrite(STEP_BL, LOW);
-      delayMicroseconds(motor_delay); 
-      FL_BR_Servo.write(servo_angle);
-      FR_BL_Servo.write(180 - servo_angle);
+      delayMicroseconds(MOTOR_DELAY); 
+      FL_BR_Servo.write(SERVO_ANGLE);
+      FR_BL_Servo.write(180 - SERVO_ANGLE);
       distance_travelled = distance_travelled + steps_to_centimeters(1);
       sweep_servos();
   }
@@ -172,8 +172,8 @@ void reverse_motor_dir() {
 
 // Turn both servos 90 Degrees
 void turn_servos(int degree) {
-  if (servo_angle <= degree) {
-    float rotation_fraction = (float) (degree - servo_angle)/360;                    //Fraction of a full circle to rotate
+  if (SERVO_ANGLE <= degree) {
+    float rotation_fraction = (float) (degree - SERVO_ANGLE)/360;                    //Fraction of a full circle to rotate
 
     bool old_DIR_FL = digitalRead(DIR_FL);
     digitalWrite(DIR_FL, LOW);
@@ -185,7 +185,7 @@ void turn_servos(int degree) {
     digitalWrite(DIR_BL, HIGH);
     
 
-    unsigned long turn_steps = (unsigned long) step_mode * 200 * 5.18 * rotation_fraction;             //Fraction of rotation times steps per rotation
+    unsigned long turn_steps = (unsigned long) STEP_MODE * 200 * 5.18 * rotation_fraction;             //Fraction of rotation times steps per rotation
     float angle_increment = (float) (360 * rotation_fraction)/turn_steps;
   
     digitalWrite(STEP_FR, HIGH);
@@ -194,11 +194,11 @@ void turn_servos(int degree) {
     for (unsigned long x = 0; x < turn_steps; x++) {
       digitalWrite(STEP_FL, HIGH);
       digitalWrite(STEP_BR, HIGH);
-      delayMicroseconds(motor_delay);                            //Was a 500 ms delay
+      delayMicroseconds(MOTOR_DELAY);                            //Was a 500 ms delay
       digitalWrite(STEP_FL, LOW);
       digitalWrite(STEP_BR, LOW);
-      delayMicroseconds(motor_delay); 
-      FL_BR_Servo.write(int(servo_angle + x * angle_increment));
+      delayMicroseconds(MOTOR_DELAY); 
+      FL_BR_Servo.write(int(SERVO_ANGLE + x * angle_increment));
     }
   
     digitalWrite(STEP_FL, HIGH);
@@ -207,11 +207,11 @@ void turn_servos(int degree) {
     for (unsigned long x = 0; x < turn_steps; x++) {
       digitalWrite(STEP_FR, HIGH);
       digitalWrite(STEP_BL, HIGH);
-      delayMicroseconds(motor_delay);                            //Was a 500 ms delay
+      delayMicroseconds(MOTOR_DELAY);                            //Was a 500 ms delay
       digitalWrite(STEP_FR, LOW);
       digitalWrite(STEP_BL, LOW);
-      delayMicroseconds(motor_delay); 
-      FR_BL_Servo.write(180 - int(servo_angle + x * angle_increment));
+      delayMicroseconds(MOTOR_DELAY); 
+      FR_BL_Servo.write(180 - int(SERVO_ANGLE + x * angle_increment));
     }
     digitalWrite(DIR_FL, old_DIR_FL);
     digitalWrite(DIR_BR, old_DIR_BR);
@@ -219,7 +219,7 @@ void turn_servos(int degree) {
     digitalWrite(DIR_BL, old_DIR_BL);
   }
   else {
-    float rotation_fraction = (float) (servo_angle - degree)/360;                    //Fraction of a full circle to rotate
+    float rotation_fraction = (float) (SERVO_ANGLE - degree)/360;                    //Fraction of a full circle to rotate
 
     bool old_DIR_FL = digitalRead(DIR_FL);
     digitalWrite(DIR_FL, HIGH);
@@ -230,7 +230,7 @@ void turn_servos(int degree) {
     bool old_DIR_BL = digitalRead(DIR_BL);
     digitalWrite(DIR_BL, LOW);
     
-    unsigned long turn_steps = (unsigned long) step_mode * 200 * 5.18 * rotation_fraction;            //Fraction of rotation times steps per rotation
+    unsigned long turn_steps = (unsigned long) STEP_MODE * 200 * 5.18 * rotation_fraction;            //Fraction of rotation times steps per rotation
     float angle_increment = (float) (360 * rotation_fraction)/turn_steps;
   
     digitalWrite(STEP_FR, HIGH);
@@ -239,11 +239,11 @@ void turn_servos(int degree) {
     for (unsigned long x = 0; x < turn_steps; x++) {
       digitalWrite(STEP_FL, HIGH);
       digitalWrite(STEP_BR, HIGH);
-      delayMicroseconds(motor_delay);                            //Was a 500 ms delay
+      delayMicroseconds(MOTOR_DELAY);                            //Was a 500 ms delay
       digitalWrite(STEP_FL, LOW);
       digitalWrite(STEP_BR, LOW);
-      delayMicroseconds(motor_delay); 
-      FL_BR_Servo.write(180 - servo_angle + int((turn_steps - x) * angle_increment));
+      delayMicroseconds(MOTOR_DELAY); 
+      FL_BR_Servo.write(180 - SERVO_ANGLE + int((turn_steps - x) * angle_increment));
     }
   
     digitalWrite(STEP_FL, HIGH);
@@ -252,11 +252,11 @@ void turn_servos(int degree) {
     for (unsigned long x = 0; x < turn_steps; x++) {
       digitalWrite(STEP_FR, HIGH);
       digitalWrite(STEP_BL, HIGH);
-      delayMicroseconds(motor_delay);                            //Was a 500 ms delay
+      delayMicroseconds(MOTOR_DELAY);                            //Was a 500 ms delay
       digitalWrite(STEP_FR, LOW);
       digitalWrite(STEP_BL, LOW);
-      delayMicroseconds(motor_delay); 
-      FR_BL_Servo.write(180 - servo_angle + x * angle_increment);
+      delayMicroseconds(MOTOR_DELAY); 
+      FR_BL_Servo.write(180 - SERVO_ANGLE + x * angle_increment);
     }
     digitalWrite(DIR_FL, old_DIR_FL);
     digitalWrite(DIR_BR, old_DIR_BR);
@@ -266,19 +266,19 @@ void turn_servos(int degree) {
   
   FL_BR_Servo.write(degree);
   FR_BL_Servo.write(180 - degree);
-  servo_angle = degree;
+  SERVO_ANGLE = degree;
 }
 
 unsigned long centimeters_to_steps(float centimeters_to_go) {
   float inches_to_go = centimeters_to_go / 2.54;
-  float revolutions = inches_to_go / (2*pi*wheel_radius);
-  unsigned long steps = (unsigned long) step_mode * 200 * revolutions * 5.18;        //200 steps/rev | 5.18 motor revolutions/wheel revolution based on observation
+  float revolutions = inches_to_go / (2*pi*WHEEL_RADIUS);
+  unsigned long steps = (unsigned long) STEP_MODE * 200 * revolutions * 5.18;        //200 steps/rev | 5.18 motor revolutions/wheel revolution based on observation
   return steps;
 }
 
 float steps_to_centimeters(unsigned long steps_to_go) {
-  float revolutions = (float) steps_to_go / (200 * 5.18 * step_mode);
-  float inches_to_go = revolutions * 2*pi*wheel_radius;
+  float revolutions = (float) steps_to_go / (200 * 5.18 * STEP_MODE);
+  float inches_to_go = revolutions * 2*pi*WHEEL_RADIUS;
   float centimeters = inches_to_go * 2.54;
   return centimeters;
 }
@@ -287,7 +287,7 @@ void adjust_speed(float speed_desired) {
   //input desired speed in cm/s to adjust robot speed
   unsigned long speed_steps_per_sec = centimeters_to_steps(speed_desired);
   unsigned long microsec_per_step = 1000000/speed_steps_per_sec;
-  motor_delay = (unsigned int) 1.5 * microsec_per_step ;                              //Each step takes about 1.5 times delay
+  MOTOR_DELAY = (unsigned int) 1.5 * microsec_per_step ;                              //Each step takes about 1.5 times delay
 }
 
 void sweep_servos() {
@@ -421,14 +421,14 @@ void rotate_robot(bool direction) {                                           //
       digitalWrite(STEP_BR, HIGH);
       digitalWrite(STEP_FR, HIGH);
       digitalWrite(STEP_BL, HIGH);
-      delayMicroseconds(motor_delay);                            //Was a 500 ms delay
+      delayMicroseconds(MOTOR_DELAY);                            //Was a 500 ms delay
       digitalWrite(STEP_FL, LOW);
       digitalWrite(STEP_BR, LOW);
       digitalWrite(STEP_FR, LOW);
       digitalWrite(STEP_BL, LOW);
-      delayMicroseconds(motor_delay); 
-      FL_BR_Servo.write(servo_angle);
-      FR_BL_Servo.write(180 - servo_angle);
+      delayMicroseconds(MOTOR_DELAY); 
+      FL_BR_Servo.write(SERVO_ANGLE);
+      FR_BL_Servo.write(180 - SERVO_ANGLE);
   }
 
   digitalWrite(DIR_FL, old_DIR_FL);
@@ -446,15 +446,15 @@ void loop() {
   delay(5);
   move_forward(centimeters_to_steps(194.6275));
   delay(5);
-  turn_servos(180-servo_angle);                             //Change to a perpendicular arrangement to turn left. 30 is straight | 150 is turned 90 degrees
+  turn_servos(180-SERVO_ANGLE);                             //Change to a perpendicular arrangement to turn left. 30 is straight | 150 is turned 90 degrees
   delay(1000);                             
   swap_motor_dir();                                           //turned to opposite orientation, so need to change
   delay(5);
   move_forward(centimeters_to_steps(60.96));
   delay(5);
-  turn_servos(180-servo_angle);                             //Change to a perpendicular arrangement to turn left. 30 is straight | 150 is turned 90 degrees
+  turn_servos(180-SERVO_ANGLE);                             //Change to a perpendicular arrangement to turn left. 30 is straight | 150 is turned 90 degrees
   delay(5);
-  turn_servos(servo_angle);
+  turn_servos(SERVO_ANGLE);
   delay(1000);          
   swap_motor_dir();                                           //Get the motors to all have the same direction
   delay(5);
@@ -506,13 +506,13 @@ void loop() {
   delay(5);
   move_forward(centimeters_to_steps(70));
   delay(5);
-  turn_servos(180-servo_angle);
+  turn_servos(180-SERVO_ANGLE);
   delay(5);
   swap_motor_dir();
   delay(5);
   move_forward(centimeters_to_steps(8));
   delay(5);
-  turn_servos(180-servo_angle);
+  turn_servos(180-SERVO_ANGLE);
   delay(5);
   swap_motor_dir();
   delay(5);
@@ -522,7 +522,7 @@ void loop() {
   delay(5);
   non_static_display();
   delay(5);
-  turn_servos(180-servo_angle);
+  turn_servos(180-SERVO_ANGLE);
   delay(1000);
   swap_motor_dir();
   delay(5);

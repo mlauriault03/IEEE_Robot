@@ -54,12 +54,10 @@ const int round_complete_LED = 46;
 /******************************
  ****** OTHER CONSTANTS *******
 *******************************/
-const int step_mode = 1;                                //microsteps/step  1 is full-step mode
-const unsigned int motor_delay = 500;
+const int STEP_MODE = 1;                                //microsteps/step  1 is full-step mode
+const unsigned int MOTOR_DELAY = 500;
 const float pi = 3.14159265358979323846264338;
-const int wheel_radius = 2;
-const int servo_angle = 30;
-
+const int TRACK = 10;
 /******************************
  ****** SETUP FUNCTIONS *******
 *******************************/
