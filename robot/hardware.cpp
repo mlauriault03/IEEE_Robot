@@ -5,7 +5,7 @@
 void setup_motor(int step_pin, int dir_pin) {
   pinMode(step_pin, OUTPUT);
   pinMode(dir_pin, OUTPUT);
-  digitalWrite(dir_pin, HIGH);
+  digitalWrite(dir_pin, HIGH);  // May not be necessary, but it's in the old code.
 }
 
 void setup_all_motors() {

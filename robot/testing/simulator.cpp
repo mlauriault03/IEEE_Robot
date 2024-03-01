@@ -1,7 +1,7 @@
 #include <cmath>
 #include <iostream>     // for debugging
 #include <utility>
-#include "../autonomy.h"
+#include "../robot.h"
 #include "simulator.h"
 
 void Simulator::set_position(double _x, double _y, double _heading) {
@@ -57,36 +57,32 @@ std::pair<double, double> Simulator::sensor_location(IRSensor sensor) {
     change_forward_side(FRONT);
 
     // find (x', y'), the position of the sensor wrt the robot's sensor.
-    double x_prime;
-    double y_prime;
+    double ir_x;
+    double ir_y;
     switch (sensor)
     {
-    case FRONT_LEFT:
-        x_prime = ir_fl_x;
-        y_prime = ir_fl_y;
+    case FRONT:
+        ir_x = IR_FRONT_X;
+        ir_y = IR_FRONT_Y;
         break;
-    case FRONT_RIGHT:
-        x_prime = ir_fr_x;
-        y_prime = ir_fr_y;
+    case BACK:
+        ir_x = IR_BACK_X;
+        ir_y = IR_BACK_Y;
         break;
-    case SIDE_FRONT:
-        x_prime = ir_sf_x;
-        y_prime = ir_sf_y;
+    case LEFT:
+        ir_x = IR_LEFT_X;
+        ir_y = IR_LEFT_Y;
         break;
-    case SIDE_BACK:
-        x_prime = ir_sb_x;
-        y_prime = ir_sb_y;
+    case RIGHT:
+        ir_x = IR_RIGHT_X;
+        ir_y = IR_RIGHT_Y;
         break;
     }
-
-    // rotate (x', y') into the global coordinate frame.
-    double dx = cos(heading) * x_prime - sin(heading) * y_prime;
-    double dy = sin(heading) * x_prime + cos(heading) * y_prime;
 
     // restore the "forward" side.
     change_forward_side(old_fwd);
     
-    std::pair<double, double> point(dx + x, dy + y);
+    std::pair<double, double> point(ir_x + x, ir_y + y);
     return point;
 }
 

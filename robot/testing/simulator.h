@@ -3,7 +3,7 @@
 
 #include <utility>
 #include <vector>
-#include "../autonomy.h"
+#include "../robot.h"
 
 class Simulator : public VehicleInterface {
 
@@ -21,16 +21,16 @@ class Simulator : public VehicleInterface {
 
     // The positions of the infrared sensors WRT the robot's center.
     // x increases toward the front,  and y increases toward the left.
-    double ir_fl_x = 5.0;
-    double ir_fl_y = 1.0;
-    double ir_fr_x = 5.0;
-    double ir_fr_y = -1.0;
-    double ir_sf_x = 1.0;
-    double ir_sf_y = 5.0;
-    double ir_sb_x = -1.0;
-    double ir_sb_y = 5.0;
+    const double IR_FRONT_X =  2.0;
+    const double IR_FRONT_Y =  0.0;
+    const double IR_BACK_X  = -2.0;
+    const double IR_BACK_Y  =  0.0;
+    const double IR_LEFT_X  =  0.0;
+    const double IR_LEFT_Y  =  2.0;
+    const double IR_RIGHT_X =  0.0;
+    const double IR_RIGHT_Y = -2.0;
 
-    double stripe_width = 2.0;
+    const double STRIPE_WIDTH = 2.0;
 
 
 public:

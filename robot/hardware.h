@@ -54,7 +54,8 @@ const int round_complete_LED = 46;
 /******************************
  ****** OTHER CONSTANTS *******
 *******************************/
-const int STEP_MODE = 1;                                //microsteps/step  1 is full-step mode
+const int STEP_MODE = 1;                                // microsteps/step  1 is full-step mode
+const double REV_PER_STEP = 200 * 5.18 * STEP_MODE;     // Revoltions/(micro?)step. This seems right based on the old code...
 const unsigned int MOTOR_DELAY = 500;
 const float pi = 3.14159265358979323846264338;
 const int TRACK = 10;
