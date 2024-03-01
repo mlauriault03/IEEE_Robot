@@ -108,13 +108,13 @@ public:
   bool ir_reads_black(Side sensor_side) {
     switch (sensor_side) {
       case BACK:
-        return analogRead(A1) == HIGH;
+        return analogRead(A1) == 1;
       case LEFT:
-        return analogRead(A2) == HIGH;
+        return analogRead(A2) == 1;
       case RIGHT:
-        return analogRead(A3) == HIGH;
+        return analogRead(A3) == 1;
       case FRONT:
-        return analogRead(A3) == HIGH;
+        return analogRead(A3) == 1;
     }
   }
 
