@@ -105,8 +105,17 @@ public:
   void spin(double deg_to_left) {
   }
 
-  void ir_reads_black(Side sensor_side) {
-    // TODO
+  bool ir_reads_black(Side sensor_side) {
+    switch (sensor_side) {
+      case BACK:
+        return analogRead(A1) == HIGH;
+      case LEFT:
+        return analogRead(A2) == HIGH;
+      case RIGHT:
+        return analogRead(A3) == HIGH;
+      case FRONT:
+        return analogRead(A3) == HIGH;
+    }
   }
 
   void change_forward_side(Side side) {
