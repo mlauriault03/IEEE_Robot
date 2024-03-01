@@ -1,5 +1,3 @@
-#include <cstdarg>
-
 #include <Arduino.h>
 #include <Servo.h>
 #include <LiquidCrystal_I2C.h>
@@ -19,9 +17,10 @@ void loop() {
 
 class Hardware : public VehicleInterface {
   // Represents the position of the steering servos.
-  // 0 = Default "forward" position.
-  // 90 = Rotate 90 degrees for driving "sideways."
-  int servo_angle = 0;
+  // 30 = Default "forward" position.
+  // 90 = About half-way rotated.
+  // 150 = Rotated 90 degrees for driving "sideways."
+  int servo_angle = 30;
 
   // Move one or more of the drive (stepper) motors one step.
   void drive_step(bool fl, bool fr, bool bl, bool br) {
@@ -54,7 +53,6 @@ class Hardware : public VehicleInterface {
   // NOTE: This chnages the stepper directions as a side effect.
   // Be sure to set them to the desired direction after calling this function.
   void move_servos(bool turned) {
-    if (servos_are_turned == turned) { return; }
     if (turned) {
       digitalWrite(FL_DRIVE_DIR, LOW);
       digitalWrite(FR_DRIVE_DIR, HIGH);
@@ -69,7 +67,7 @@ class Hardware : public VehicleInterface {
 
     // Assume the servos and the wheels have approximately the same radius.
     int nsteps = (int)(0.25 / REV_PER_STEP);
-    double desired_angle = turned ? 90.0 : 0.0;
+    double desired_angle = turned ? 150.0 : 30.0;
     double angle_inc = (desired_angle - servo_angle) / (double)nsteps;
     for (int i = 0; i < nsteps; i++) {
       servo_angle += angle_inc;
@@ -79,11 +77,11 @@ class Hardware : public VehicleInterface {
 
 public:
 
-  Hardware() : forward = FRONT {
+  Hardware() {
     // Make sure the servos are where we think they are.
     update_servos();
     // Now initialize stepper motor directions.
-    change_forward_side(Side.FRONT);
+    change_forward_side(FRONT);
   }
 
   void move_forward(int nsteps) {
@@ -107,46 +105,45 @@ public:
   void spin(double deg_to_left) {
   }
 
-  // TODO
-  bool ir_reads_black(IRSensor sensor) {
-    switch (sensor):
-      case 
+  void ir_reads_black(Side sensor_side) {
+    // TODO
   }
 
   void change_forward_side(Side side) {
     // Move the steering servos.
-    if (side == Side.FRONT || side == Side.BACK) {
+    if (side == FRONT || side == BACK) {
       move_servos(false);
     }
     else {
       move_servos(true);
     }
     // Update stepper directions.
-    switch (side):
-    case Side.FRONT:
+    switch (side) {
+    case FRONT:
       digitalWrite(FL_DRIVE_DIR, LOW);
       digitalWrite(FR_DRIVE_DIR, HIGH);
       digitalWrite(BL_DRIVE_DIR, LOW);
       digitalWrite(BR_DRIVE_DIR, HIGH);
       break;
-    case Side.BACK:
+    case BACK:
       digitalWrite(FL_DRIVE_DIR, HIGH);
       digitalWrite(FR_DRIVE_DIR, LOW);
       digitalWrite(BL_DRIVE_DIR, HIGH);
       digitalWrite(BR_DRIVE_DIR, LOW);
       break;
-    case Side.LEFT:
+    case LEFT:
       digitalWrite(FL_DRIVE_DIR, HIGH);
       digitalWrite(FR_DRIVE_DIR, HIGH);
       digitalWrite(BL_DRIVE_DIR, LOW);
       digitalWrite(BR_DRIVE_DIR, LOW);
       break;
-    case Side.RIGHT:
+    case RIGHT:
       digitalWrite(FL_DRIVE_DIR, LOW);
       digitalWrite(FR_DRIVE_DIR, LOW);
       digitalWrite(BL_DRIVE_DIR, HIGH);
       digitalWrite(BR_DRIVE_DIR, HIGH);
       break;
+    }
   }
 
 };
