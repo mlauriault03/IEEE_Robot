@@ -17,9 +17,10 @@ void loop() {
 
 class Hardware : public VehicleInterface {
   // Represents the position of the steering servos.
-  // 0 = Default "forward" position.
-  // 90 = Rotate 90 degrees for driving "sideways."
-  int servo_angle = 0;
+  // 30 = Default "forward" position.
+  // 90 = About half-way rotated.
+  // 150 = Rotated 90 degrees for driving "sideways."
+  int servo_angle = 30;
 
   // Move one or more of the drive (stepper) motors one step.
   void drive_step(bool fl, bool fr, bool bl, bool br) {
@@ -66,7 +67,7 @@ class Hardware : public VehicleInterface {
 
     // Assume the servos and the wheels have approximately the same radius.
     int nsteps = (int)(0.25 / REV_PER_STEP);
-    double desired_angle = turned ? 90.0 : 0.0;
+    double desired_angle = turned ? 150.0 : 30.0;
     double angle_inc = (desired_angle - servo_angle) / (double)nsteps;
     for (int i = 0; i < nsteps; i++) {
       servo_angle += angle_inc;
