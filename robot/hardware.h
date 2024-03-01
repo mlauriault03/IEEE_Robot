@@ -65,5 +65,6 @@ const int TRACK = 10;
 void setup_all_motors();
 void setup_servos();
 void setup_display();
+void setup_IR_sensors();
 
 #endif

@@ -108,7 +108,10 @@ public:
   }
 
   // TODO
-  void ir_reads_black(IRSensor sensor) {}
+  bool ir_reads_black(IRSensor sensor) {
+    switch (sensor):
+      case 
+  }
 
   void change_forward_side(Side side) {
     // Move the steering servos.
