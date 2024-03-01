@@ -1,5 +1,3 @@
-#include <cstdarg>
-
 #include <Arduino.h>
 #include <Servo.h>
 #include <LiquidCrystal_I2C.h>
@@ -54,7 +52,6 @@ class Hardware : public VehicleInterface {
   // NOTE: This chnages the stepper directions as a side effect.
   // Be sure to set them to the desired direction after calling this function.
   void move_servos(bool turned) {
-    if (servos_are_turned == turned) { return; }
     if (turned) {
       digitalWrite(FL_DRIVE_DIR, LOW);
       digitalWrite(FR_DRIVE_DIR, HIGH);
@@ -79,11 +76,11 @@ class Hardware : public VehicleInterface {
 
 public:
 
-  Hardware() : forward = FRONT {
+  Hardware() {
     // Make sure the servos are where we think they are.
     update_servos();
     // Now initialize stepper motor directions.
-    change_forward_side(Side.FRONT);
+    change_forward_side(FRONT);
   }
 
   void move_forward(int nsteps) {
@@ -107,43 +104,45 @@ public:
   void spin(double deg_to_left) {
   }
 
-  // TODO
-  void ir_reads_black(IRSensor sensor) {}
+  void ir_reads_black(Side sensor_side) {
+    // TODO
+  }
 
   void change_forward_side(Side side) {
     // Move the steering servos.
-    if (side == Side.FRONT || side == Side.BACK) {
+    if (side == FRONT || side == BACK) {
       move_servos(false);
     }
     else {
       move_servos(true);
     }
     // Update stepper directions.
-    switch (side):
-    case Side.FRONT:
+    switch (side) {
+    case FRONT:
       digitalWrite(FL_DRIVE_DIR, LOW);
       digitalWrite(FR_DRIVE_DIR, HIGH);
       digitalWrite(BL_DRIVE_DIR, LOW);
       digitalWrite(BR_DRIVE_DIR, HIGH);
       break;
-    case Side.BACK:
+    case BACK:
       digitalWrite(FL_DRIVE_DIR, HIGH);
       digitalWrite(FR_DRIVE_DIR, LOW);
       digitalWrite(BL_DRIVE_DIR, HIGH);
       digitalWrite(BR_DRIVE_DIR, LOW);
       break;
-    case Side.LEFT:
+    case LEFT:
       digitalWrite(FL_DRIVE_DIR, HIGH);
       digitalWrite(FR_DRIVE_DIR, HIGH);
       digitalWrite(BL_DRIVE_DIR, LOW);
       digitalWrite(BR_DRIVE_DIR, LOW);
       break;
-    case Side.RIGHT:
+    case RIGHT:
       digitalWrite(FL_DRIVE_DIR, LOW);
       digitalWrite(FR_DRIVE_DIR, LOW);
       digitalWrite(BL_DRIVE_DIR, HIGH);
       digitalWrite(BR_DRIVE_DIR, HIGH);
       break;
+    }
   }
 
 };
