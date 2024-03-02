@@ -7,7 +7,7 @@
 #include "hardware.h"
 
 // Move one or more of the drive (stepper) motors one step.
-void Hardware::drive_step(bool fl, bool fr, bool bl, bool br) {
+void Vehicle::drive_step(bool fl, bool fr, bool bl, bool br) {
   if (fl) { digitalWrite(FL_DRIVE_STEP, HIGH); }
   if (bl) { digitalWrite(BL_DRIVE_STEP, HIGH); }
   if (fr) { digitalWrite(FR_DRIVE_STEP, HIGH); }
@@ -25,7 +25,7 @@ void Hardware::drive_step(bool fl, bool fr, bool bl, bool br) {
 // 
 // degrees = 30 sets the servos to the "normal" forward position.
 // degrees = 150 sets the servos to the fully rotated position (to drive "sideways")
-void Hardware::update_servos() {
+void Vehicle::update_servos() {
   FL_SERVO.write(servo_angle);
   BR_SERVO.write(servo_angle);
   FR_SERVO.write(180 - servo_angle);
@@ -36,7 +36,7 @@ void Hardware::update_servos() {
 //
 // NOTE: This chnages the stepper directions as a side effect.
 // Be sure to set them to the desired direction after calling this function.
-void Hardware::move_servos(bool turned) {
+void Vehicle::move_servos(bool turned) {
   if (turned) {
     digitalWrite(FL_DRIVE_DIR, LOW);
     digitalWrite(FR_DRIVE_DIR, HIGH);
@@ -60,35 +60,35 @@ void Hardware::move_servos(bool turned) {
   servo_angle = desired_angle;  // Make sure we have the right angle.
 }
 
-Hardware::Hardware() {
+Vehicle::Vehicle() {
   // Make sure the servos are where we think they are.
   update_servos();
   // Now initialize stepper motor directions.
   change_forward_side(FRONT);
 }
 
-void Hardware::move_forward(int nsteps) {
+void Vehicle::move_forward(int nsteps) {
   for (int i = 0; i < nsteps; i++) {
     drive_step(true, true, true, true);
   }
 }
 
-void Hardware::move_left_wheels(int nsteps) {
+void Vehicle::move_left_wheels(int nsteps) {
   for (int i = 0; i < nsteps; i++) {
     drive_step(true, false, true, false);
   }
 }
 
-void Hardware::move_right_wheels(int nsteps) {
+void Vehicle::move_right_wheels(int nsteps) {
   for (int i = 0; i < nsteps; i++) {
     drive_step(false, true, false, true);
   }
 }
 
-void Hardware::spin(double deg_to_left) {
+void Vehicle::spin(double deg_to_left) {
 }
 
-bool Hardware::ir_reads_black(Direction sensor_direction) {
+bool Vehicle::ir_reads_black(Direction sensor_direction) {
   int side = (forward_side + sensor_direction) % 360;
   switch (side) {
     case 0:
@@ -102,7 +102,7 @@ bool Hardware::ir_reads_black(Direction sensor_direction) {
   }
 }
 
-void Hardware::change_forward_side(Side side) {
+void Vehicle::change_forward_side(Side side) {
   forward_side = side;
   // Move the steering servos.
   if (side == FRONT || side == BACK) {
@@ -145,7 +145,7 @@ void setup() {
   setup_servos();
   setup_display();
   
-  Hardware vehicle = Hardware();
+  Vehicle vehicle = Vehicle();
   TestMovement action = TestMovement(vehicle);
   action.run();
 }

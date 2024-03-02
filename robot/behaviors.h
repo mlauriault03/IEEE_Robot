@@ -5,9 +5,9 @@
 
 class Behavior {
 public:
-    Hardware& vehicle;
+    Vehicle& vehicle;
 
-    Behavior(Hardware& v) : vehicle(v) {}
+    Behavior(Vehicle& v) : vehicle(v) {}
 
     int run();
 };
