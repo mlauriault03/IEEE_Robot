@@ -31,14 +31,14 @@ const int LEFT_IR_PIN = A2;
 const int RIGHT_IR_PIN = A3;
 const int FRONT_IR_PIN = A4;
 
-const int BL_DRIVE_DIR = 53;
-const int FL_DRIVE_DIR = 49;
-const int BR_DRIVE_DIR = 51;
-const int FR_DRIVE_DIR = 47;
-const int FL_DRIVE_STEP = 48;
-const int BL_DRIVE_STEP = 52;
 const int FR_DRIVE_STEP = 46;
+const int FR_DRIVE_DIR  = 47;
+const int FL_DRIVE_STEP = 48;
+const int FL_DRIVE_DIR  = 49;
 const int BR_DRIVE_STEP = 50;
+const int BR_DRIVE_DIR  = 51;
+const int BL_DRIVE_STEP = 52;
+const int BL_DRIVE_DIR  = 53;
 
 //Start group pins
 const int start_switch = 47;
@@ -46,7 +46,8 @@ const int ready_LED = 48;
 const int photosensor = 41;
 
 //Display system
-const LiquidCrystal_I2C lcd(0x3F, 16, 2);               // I2C address 0x3F, 16 column and 2 rows
+// I2C address 0x3F, 16 column and 2 rows
+const LiquidCrystal_I2C lcd(0x3F, 16, 2);
 
 //Final pins
 const int round_complete_LED = 46;
@@ -54,9 +55,10 @@ const int round_complete_LED = 46;
 /******************************
  ****** OTHER CONSTANTS *******
 *******************************/
-const int STEP_MODE = 1;                                // microsteps/step  1 is full-step mode
-const double REV_PER_STEP = 200 * 5.18 * STEP_MODE;     // Revoltions/(micro?)step. This seems right based on the old code...
-const unsigned int MOTOR_DELAY = 500;
+const int STEP_MODE = 1;        // microsteps/step  1 is full-step mode
+// 200 steps/rev | 5.18 motor rev/wheel revolution based on observation
+const double STEPS_PER_REV = 200 * 5.18 * STEP_MODE;
+const unsigned int MOTOR_DELAY = 240;
 const float pi = 3.14159265358979323846264338;
 const int TRACK = 10;
 /******************************
@@ -65,5 +67,6 @@ const int TRACK = 10;
 void setup_all_motors();
 void setup_servos();
 void setup_display();
+void setup_IR_sensors();
 
 #endif

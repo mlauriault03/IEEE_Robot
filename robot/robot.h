@@ -13,7 +13,9 @@ enum Side {FRONT=0, LEFT=90, BACK=180, RIGHT=270};
 //
 // FORWARD is the direction we are currently driving, and the
 // other directions are defined accordingly.
-enum Direction {FORWARD, LEFTWARD, RIGHTWARD, BACKWARD};
+//
+// Values represent degress coutnerclockwise from FORWARD.
+enum Direction {FORWARD=0, LEFTWARD=90, BACKWARD=180, RIGHTWARD=270};
 
 // This class provides a basic interface to the robot's hardware.
 class Hardware {
@@ -22,6 +24,8 @@ class Hardware {
     // 90 = About half-way rotated.
     // 150 = Rotated 90 degrees for driving "sideways."
     int servo_angle = 30;
+
+    Side forward_side = FRONT;
 
     void drive_step(bool fl, bool fr, bool bl, bool br);
     void update_servos();

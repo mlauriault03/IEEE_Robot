@@ -12,7 +12,7 @@ void Hardware::drive_step(bool fl, bool fr, bool bl, bool br) {
   if (bl) { digitalWrite(BL_DRIVE_STEP, HIGH); }
   if (fr) { digitalWrite(FR_DRIVE_STEP, HIGH); }
   if (br) { digitalWrite(BR_DRIVE_STEP, HIGH); }
-  delayMicroseconds(MOTOR_DELAY);                            //Was a 500 microsecond delay
+  delayMicroseconds(MOTOR_DELAY);
   if (fl) { digitalWrite(FL_DRIVE_STEP, LOW); }
   if (bl) { digitalWrite(BL_DRIVE_STEP, LOW); }
   if (fr) { digitalWrite(FR_DRIVE_STEP, LOW); }
@@ -23,13 +23,13 @@ void Hardware::drive_step(bool fl, bool fr, bool bl, bool br) {
 
 // Set all four servos to a specified angle.
 // 
-// degrees = 0 sets the servos to the "normal" forward position.
-// degrees = 90 sets the servos to the fully rotated position (to drive "sideways")
+// degrees = 30 sets the servos to the "normal" forward position.
+// degrees = 150 sets the servos to the fully rotated position (to drive "sideways")
 void Hardware::update_servos() {
-  FR_SERVO.write(servo_angle);
-  FL_SERVO.write(180 - servo_angle);
-  BR_SERVO.write(180 - servo_angle);
-  BL_SERVO.write(servo_angle);
+  FL_SERVO.write(servo_angle);
+  BR_SERVO.write(servo_angle);
+  FR_SERVO.write(180 - servo_angle);
+  BL_SERVO.write(180 - servo_angle);
 }
 
 // Move steering servos to the normal or turned position.
@@ -50,13 +50,14 @@ void Hardware::move_servos(bool turned) {
   }
 
   // Assume the servos and the wheels have approximately the same radius.
-  int nsteps = (int)(0.25 / REV_PER_STEP);
+  int nsteps = (int)(0.25 * STEPS_PER_REV);
   double desired_angle = turned ? 150.0 : 30.0;
   double angle_inc = (desired_angle - servo_angle) / (double)nsteps;
   for (int i = 0; i < nsteps; i++) {
     servo_angle += angle_inc;
     drive_step(true, true, true, true);   // Moves steppers and servos.
   }
+  servo_angle = desired_angle;  // Make sure we have the right angle.
 }
 
 Hardware::Hardware() {
@@ -87,11 +88,22 @@ void Hardware::move_right_wheels(int nsteps) {
 void Hardware::spin(double deg_to_left) {
 }
 
-bool Hardware::ir_reads_black(Direction sensor_side) {
-  // TODO
+bool Hardware::ir_reads_black(Direction sensor_direction) {
+  int side = (forward_side + sensor_direction) % 360;
+  switch (side) {
+    case 0:
+      return analogRead(FRONT_IR_PIN) == 1;
+    case 90:
+      return analogRead(LEFT_IR_PIN) == 1;
+    case 180:
+      return analogRead(BACK_IR_PIN) == 1;
+    case 270:
+      return analogRead(RIGHT_IR_PIN) == 1;
+  }
 }
 
 void Hardware::change_forward_side(Side side) {
+  forward_side = side;
   // Move the steering servos.
   if (side == FRONT || side == BACK) {
     move_servos(false);
@@ -127,7 +139,6 @@ void Hardware::change_forward_side(Side side) {
     break;
   }
 }
-
 
 void setup() {
   setup_all_motors();
