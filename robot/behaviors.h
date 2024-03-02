@@ -4,9 +4,10 @@
 #include "robot.h"
 
 class Behavior {
-    VehicleInterface& vehicle;
+public:
+    Hardware& vehicle;
 
-    public: Behavior(VehicleInterface& v) : vehicle(v) {}
+    Behavior(Hardware& v) : vehicle(v) {}
 
     int run();
 };
@@ -14,6 +15,7 @@ class Behavior {
 class FollowLine : public Behavior {
     using Behavior::Behavior;
 
+public:
     int run();
 
     enum Result { SUCCESS, LOST_LINE };
@@ -22,6 +24,7 @@ class FollowLine : public Behavior {
 class ForwardOnLine : public Behavior {
     using Behavior::Behavior;
 
+public:
     int run();
 
     enum Result { SUCCESS, LOST_LINE, LEFT_OF_LINE, RIGHT_OF_LINE };
@@ -30,6 +33,7 @@ class ForwardOnLine : public Behavior {
 class LeftTowardLine : public Behavior {
     using Behavior::Behavior;
 
+public:
     int run();
 
     enum Result { SUCCESS, LOST_LINE, LEFT_OF_LINE, RIGHT_OF_LINE };
@@ -38,6 +42,7 @@ class LeftTowardLine : public Behavior {
 class RightTowardLine : public Behavior {
     using Behavior::Behavior;
 
+public:
     int run();
 
     enum Result { SUCCESS, LOST_LINE, LEFT_OF_LINE, RIGHT_OF_LINE };
@@ -46,6 +51,7 @@ class RightTowardLine : public Behavior {
 class TestMovement : public Behavior {
     using Behavior::Behavior;
 
+public:
     int run();
 
     enum Result { SUCCESS };

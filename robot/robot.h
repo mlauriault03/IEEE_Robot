@@ -16,8 +16,20 @@ enum Side {FRONT=0, LEFT=90, BACK=180, RIGHT=270};
 enum Direction {FORWARD, LEFTWARD, RIGHTWARD, BACKWARD};
 
 // This class provides a basic interface to the robot's hardware.
-class VehicleInterface {
+class Hardware {
+    // Represents the position of the steering servos.
+    // 30 = Default "forward" position.
+    // 90 = About half-way rotated.
+    // 150 = Rotated 90 degrees for driving "sideways."
+    int servo_angle = 30;
+
+    void drive_step(bool fl, bool fr, bool bl, bool br);
+    void update_servos();
+    void move_servos(bool turned);
+
 public:
+    Hardware();
+
     void move_forward(int nsteps);              // Move forward.
     void move_left_wheels(int nsteps);          // Move left wheels only.
     void move_right_wheels(int nsteps);         // Move right wheels only.
