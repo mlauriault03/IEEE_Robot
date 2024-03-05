@@ -2,6 +2,11 @@
 #include <Arduino.h>      // Inlcude to make VSCode happy.
 #include "hardware.h"
 
+Servo FR_SERVO;
+Servo FL_SERVO;
+Servo BR_SERVO;
+Servo BL_SERVO;
+
 void setup_motor(int step_pin, int dir_pin) {
   pinMode(step_pin, OUTPUT);
   pinMode(dir_pin, OUTPUT);

@@ -114,37 +114,39 @@ void Vehicle::change_forward_side(Side side) {
   // Update stepper directions.
   switch (side) {
   case FRONT:
-    digitalWrite(FL_DRIVE_DIR, LOW);
+    digitalWrite(FL_DRIVE_DIR, HIGH);
     digitalWrite(FR_DRIVE_DIR, HIGH);
-    digitalWrite(BL_DRIVE_DIR, LOW);
+    digitalWrite(BL_DRIVE_DIR, HIGH);
     digitalWrite(BR_DRIVE_DIR, HIGH);
     break;
   case BACK:
-    digitalWrite(FL_DRIVE_DIR, HIGH);
+    digitalWrite(FL_DRIVE_DIR, LOW);
     digitalWrite(FR_DRIVE_DIR, LOW);
-    digitalWrite(BL_DRIVE_DIR, HIGH);
-    digitalWrite(BR_DRIVE_DIR, LOW);
-    break;
-  case LEFT:
-    digitalWrite(FL_DRIVE_DIR, HIGH);
-    digitalWrite(FR_DRIVE_DIR, HIGH);
     digitalWrite(BL_DRIVE_DIR, LOW);
     digitalWrite(BR_DRIVE_DIR, LOW);
     break;
-  case RIGHT:
+  case LEFT:
     digitalWrite(FL_DRIVE_DIR, LOW);
-    digitalWrite(FR_DRIVE_DIR, LOW);
+    digitalWrite(FR_DRIVE_DIR, HIGH);
     digitalWrite(BL_DRIVE_DIR, HIGH);
+    digitalWrite(BR_DRIVE_DIR, LOW);
+    break;
+  case RIGHT:
+    digitalWrite(FL_DRIVE_DIR, HIGH);
+    digitalWrite(FR_DRIVE_DIR, LOW);
+    digitalWrite(BL_DRIVE_DIR, LOW);
     digitalWrite(BR_DRIVE_DIR, HIGH);
     break;
   }
 }
 
 void setup() {
+  delay(4000);          // Give some time to step away.
+
   setup_all_motors();
   setup_servos();
   setup_display();
-  
+
   Vehicle vehicle = Vehicle();
   TestMovement action = TestMovement(vehicle);
   action.run();

@@ -2,9 +2,9 @@
 #include "robot.h"
 
 int TestMovement::run() {
-  vehicle.move_forward(500);
+  vehicle.move_forward(5000);
   vehicle.change_forward_side(LEFT);
-  vehicle.move_forward(300);
+  vehicle.move_forward(3000);
 
   return TestMovement::Result::SUCCESS;
 }

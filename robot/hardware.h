@@ -21,10 +21,11 @@ const int BL_SERVO_PIN = 3;
 const int FL_SERVO_PIN = 4;
 const int FR_SERVO_PIN = 5;
 
-const Servo FR_SERVO;
-const Servo FL_SERVO;
-const Servo BR_SERVO;
-const Servo BL_SERVO;
+// Don't declare these as const, or the compiler may pass different copies to different files.
+extern Servo FR_SERVO;
+extern Servo FL_SERVO;
+extern Servo BR_SERVO;
+extern Servo BL_SERVO;
 
 const int BACK_IR_PIN = A1;
 const int LEFT_IR_PIN = A2;
@@ -58,7 +59,7 @@ const int round_complete_LED = 46;
 const int STEP_MODE = 1;        // microsteps/step  1 is full-step mode
 // 200 steps/rev | 5.18 motor rev/wheel revolution based on observation
 const double STEPS_PER_REV = 200 * 5.18 * STEP_MODE;
-const unsigned int MOTOR_DELAY = 240;
+const unsigned int MOTOR_DELAY = 500;
 const float pi = 3.14159265358979323846264338;
 const int TRACK = 10;
 /******************************
