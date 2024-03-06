@@ -85,6 +85,108 @@ void Vehicle::move_right_wheels(int nsteps) {
   }
 }
 
+void Vehicle::write_drive(bool fl, bool fr, bool bl, bool br, bool value) {
+  if (fl) { digitalWrite(FL_DRIVE_STEP, value); }
+  if (bl) { digitalWrite(BL_DRIVE_STEP, value); }
+  if (fr) { digitalWrite(FR_DRIVE_STEP, value); }
+  if (br) { digitalWrite(BR_DRIVE_STEP, value); }
+}
+
+// Send HIGH or LOW to the left or right drive motors.
+// "Left" and "right" are defined relative to the forward_side.
+void Vehicle::write_drive(bool left, bool value) {
+  bool fl, fr, bl, br;
+
+  // Assume we want the right wheels (relative to forward_side).
+  switch (forward_side) {
+    case (FRONT):
+      // "right" = true right
+      fl = false; fr = true;  bl = false; br = true;
+      break;
+    case (LEFT):
+      // "right" = true back
+      fl = false; fr = false; bl = true;  br = true;
+      break;
+    case (BACK):
+      // "right" = true left
+      fl = true;  fr = false; bl = true;  br = false;
+      break;
+    case (RIGHT):
+      // "right" = true front
+      fl = true;  fr = true;  bl = false; br = false;
+      break;
+  }
+
+  if (fl) { digitalWrite(FL_DRIVE_STEP, value); }
+  if (bl) { digitalWrite(BL_DRIVE_STEP, value); }
+  if (fr) { digitalWrite(FR_DRIVE_STEP, value); }
+  if (br) { digitalWrite(BR_DRIVE_STEP, value); }
+}
+
+// If the wheels on one side of the robot step with base_delay,
+// find the delay for the other set of wheels if the robot is to
+// drive with the given curvature.
+//
+// The value returned should be less than base_delay. So use base_delay
+// for the side moving slower and the result of this function for the
+// side moving faster.
+//
+// The value returned will be no smaller than 250.
+int Vehicle::delay_for_curvature(int base_delay, double curvature) {
+  // Only accept positive curvature;
+  if (curvature < 0) {curvature = -curvature;}
+  int extended_delay = (int)(base_delay / (1 + TRACK*curvature));
+
+  // Just to be safe, set minimum values for the delay.
+  if (extended_delay < 250) {
+    return 250;
+  }
+  return extended_delay;
+}
+
+// Drive a specified distance with the given curvature.
+//
+// Curvature is measured in 1/in. A positive curvature curves to the left.
+void Vehicle::drive(double inches, double curv) {
+  int left_delay, right_delay;
+  if (curv > 0) {
+    left_delay = MOTOR_DELAY;
+    right_delay = delay_for_curvature(left_delay, curv);
+  } else {
+    right_delay = MOTOR_DELAY;
+    left_delay = delay_for_curvature(right_delay, curv);
+  }
+
+  int total_time = inches * STEPS_PER_INCH * MOTOR_DELAY;
+  int t = 0;
+  int next_left = 0;
+  int next_right = 0;
+  bool left_state = LOW;
+  bool right_state = LOW;
+
+  while (t < total_time) {
+    bool move_left = next_left <= next_right;
+    bool move_right = next_right <= next_left;
+    
+    int wait_time;
+    if (move_left) {
+      wait_time = next_left - t;
+      next_left += left_delay;
+      left_state = !left_state;
+      write_drive(true, left_state);
+    }
+    if (move_right) {
+      wait_time = next_right - t;
+      next_right += right_delay;
+      right_state = !right_state;
+      write_drive(false, right_state);
+    }
+
+    delay(wait_time);
+    t += wait_time;
+  }
+}
+
 void Vehicle::spin(double deg_to_left) {
 }
 

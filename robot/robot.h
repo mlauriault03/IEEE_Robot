@@ -30,6 +30,9 @@ class Vehicle {
     void drive_step(bool fl, bool fr, bool bl, bool br);
     void update_servos();
     void move_servos(bool turned);
+    void write_drive(bool left, bool value);
+    void write_drive(bool fl, bool fr, bool bl, bool br, bool value);
+    int delay_for_curvature(int base_delay, double curvature);
 
 public:
     Vehicle();
@@ -37,6 +40,8 @@ public:
     void move_forward(int nsteps);              // Move forward.
     void move_left_wheels(int nsteps);          // Move left wheels only.
     void move_right_wheels(int nsteps);         // Move right wheels only.
+    
+    void drive(double inches, double curvature);// Move with the specified curvature. Left is positive.
 
     void spin(double deg_to_left);              // Do in-place rotation by differential drive.
 
