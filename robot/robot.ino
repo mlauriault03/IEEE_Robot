@@ -182,7 +182,7 @@ void Vehicle::drive(double inches, double curv) {
       write_drive(false, right_state);
     }
 
-    delay(wait_time);
+    delayMicroseconds(wait_time);
     t += wait_time;
   }
 }
@@ -205,6 +205,7 @@ bool Vehicle::ir_reads_black(Direction sensor_direction) {
 }
 
 void Vehicle::change_forward_side(Side side) {
+  delay(300);   // Add a short delay to stop moving.
   forward_side = side;
   // Move the steering servos.
   if (side == FRONT || side == BACK) {
