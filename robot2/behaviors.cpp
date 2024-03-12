@@ -1,24 +1,22 @@
-#include <Arduino.h>
 #include "behaviors.h"
-#include "robot.h"
+#include "robot2.h"
 
-int TestMovement::run() {
-    //vehicle.move_forward(2000);
-    //vehicle.change_forward_side(LEFT);
-    vehicle.drive(1000, 0);
-    delay(1000);
-    vehicle.drive(1000, 0);
-//    vehicle.change_forward_side(LEFT);
-//    vehicle.drive(1000, 0);
-//    vehicle.change_forward_side(BACK);
-//
-//    vehicle.drive(1000, 0);
-//    vehicle.change_forward_side(RIGHT);
-//    vehicle.drive(1000, 0);
-//    vehicle.change_forward_side(FRONT);
-//
-//    vehicle.drive(1000, 30);
-//    vehicle.drive(1000, -30);
+int FollowLine::run() {
+    bool see_right = ir_reads_black(RIGHTWARD);
+    bool see_left = ir_reads_black(LEFTWARD);
+    if (see_right && see_left) {
+        int result = ForwardOnLine::run();
+    }
+}
 
-    return TestMovement::Result::SUCCESS;
+int ForwardOnLine::run() {
+
+}
+
+int LeftTowardLine::run() {
+
+}
+
+int RightTowardLine::run() {
+
 }
