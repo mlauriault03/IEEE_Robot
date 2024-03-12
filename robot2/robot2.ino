@@ -79,6 +79,7 @@ void setup_servos() {
   FL_SERVO.attach(FL_SERVO_PIN, 500, 2500);     //MG996R - 500 to 2500
   BR_SERVO.attach(BR_SERVO_PIN, 500, 2500);     //MG996R - 500 to 2500
   BL_SERVO.attach(BL_SERVO_PIN, 500, 2500);     //MG996R - 500 to 2500
+  update_servos();
 }
 
 void setup_display() {
@@ -206,13 +207,13 @@ bool ir_reads_black(Direction sensor_direction) {
   int side = (forward_side + sensor_direction) % 360;
   switch (side) {
     case 0:
-      return analogRead(FRONT_IR_PIN) == 1;
+      return analogRead(FRONT_IR_PIN) > 600;
     case 90:
-      return analogRead(LEFT_IR_PIN) == 1;
+      return analogRead(LEFT_IR_PIN) > 600;
     case 180:
-      return analogRead(BACK_IR_PIN) == 1;
+      return analogRead(BACK_IR_PIN) > 600;
     case 270:
-      return analogRead(RIGHT_IR_PIN) == 1;
+      return analogRead(RIGHT_IR_PIN) > 600;
   }
 }
 
@@ -383,11 +384,12 @@ void setup() {
   setup_all_motors();
   setup_servos();
   setup_display();
+  change_forward_side(FRONT);
 }
 
 void loop() {
-  //FollowLine::run();
-  Tests::test_diff_drive();
+  FollowLine::run();
+  //Tests::test_diff_drive();
   while (true) {};      // Wait forever.
 }
 

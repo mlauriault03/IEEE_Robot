@@ -18,7 +18,7 @@ namespace FollowLine {
             return RIGHT_OF_LINE;
         }
         else {
-            return LOST_LINE;
+            return SUCCESS;
         }
     }
 
@@ -55,14 +55,14 @@ namespace FollowLine {
 
     int go_right() {
         while (ir_reads_black(LEFTWARD) && !ir_reads_black(RIGHTWARD)) {
-            drive_diff(MOTOR_DELAY*1.1, MOTOR_DELAY, 100);
+            drive_diff(MOTOR_DELAY*0.9, MOTOR_DELAY, 100);
         }
         return where_on_line();
     }
 
     int go_left() {
         while (!ir_reads_black(LEFTWARD) && ir_reads_black(RIGHTWARD)) {
-            drive_diff(MOTOR_DELAY, MOTOR_DELAY*1.1, 100);
+            drive_diff(MOTOR_DELAY, MOTOR_DELAY*0.9, 100);
         }
         return where_on_line();
     }
