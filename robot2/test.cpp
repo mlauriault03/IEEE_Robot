@@ -23,7 +23,10 @@ int test_drive_diff() {
 
     drive_diff(500, 700, 10);
     // Left wheels should take 10 steps, and right wheels should take 7 steps.
-    if (abs(step_writes_fl - 20) < 3 && abs(step_writes_bl - 10) < 3 && abs(step_writes_br - 7) < 3 && abs(step_writes_fr - 7) < 3) {
+    if ((abs(step_writes_fl - 20) < 3)
+            && (abs(step_writes_bl - 20) < 3)
+            && (abs(step_writes_br - 14) < 3)
+            && (abs(step_writes_fr - 14) < 3)) {
         return 0;
     }
     printf("fl: %d steps; bl: %d steps; fr: %d steps; br: %d steps\n", step_writes_fl, step_writes_bl, step_writes_fr, step_writes_br);
