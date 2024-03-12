@@ -5,10 +5,11 @@
 
 #include "robot2.h"
 
-extern int nsteps_fl;
-extern int nsteps_fr;
-extern int nsteps_bl;
-extern int nsteps_br;
+extern int step_writes_fl;
+extern int step_writes_fr;
+extern int step_writes_bl;
+extern int step_writes_br;
+
 
 void delay(unsigned long ms);
 void delayMicroseconds(unsigned int us);

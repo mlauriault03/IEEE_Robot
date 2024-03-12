@@ -1,12 +1,14 @@
 #include "mechanics.h"
+#include "robot2.h"
 #include <cstdio>
 
 #ifdef DEBUG
 #include "mock.h"
 #endif
 
-void drive_diff(int left_delay, int right_delay, int nsteps) {
-    long start = micros();
+void drive_diff(unsigned long left_delay, unsigned long right_delay, int nsteps) {
+    unsigned long start_left = micros();
+    unsigned long start_right = micros();
 
     int nsteps_right = 0;
     int nsteps_left = 0;
@@ -17,22 +19,23 @@ void drive_diff(int left_delay, int right_delay, int nsteps) {
     write_drive(false, true, false, true, left_state);
 
     while (nsteps_left < nsteps && nsteps_right < nsteps) {
-        long elapsed = micros() - start;
-        if (elapsed >= left_delay) {
-            right_state = ~right_state;
+        unsigned long t_left = micros() - start_left;
+        unsigned long t_right = micros() - start_right;
+        if (t_left >= left_delay) {
+            left_state = !left_state;
             write_drive(true, false, true, false, right_state);
-            if (right_state) {
+            if (left_state) {
                 nsteps_left++;
             }
-            start = micros();
+            start_left = micros();
         }
-        if (elapsed >= right_delay) {
-            left_state = ~left_state;
+        if (t_right >= right_delay) {
+            right_state = !right_state;
             write_drive(false, true, false, true, left_state);
-            if (left_state) {
+            if (right_state) {
                 nsteps_right++;
             }
-            start = micros();
+            start_right = micros();
         }
     }
 

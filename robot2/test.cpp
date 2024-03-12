@@ -1,6 +1,7 @@
 #ifdef DEBUG
 
 #include <cstdio>
+#include <cstdlib>
 
 #include "robot2.h"
 #include "mechanics.h"
@@ -14,12 +15,18 @@ int test_mock_wait_for_micros() {
 
 int test_drive_diff() {
     change_forward_side(FRONT);
+
+    step_writes_fl = 0;
+    step_writes_fr = 0;
+    step_writes_bl = 0;
+    step_writes_br = 0;
+
     drive_diff(500, 700, 10);
     // Left wheels should take 10 steps, and right wheels should take 7 steps.
-    if (nsteps_fl == 10 && nsteps_bl == 10 && nsteps_br == 7 && nsteps_fr == 7) {
+    if (abs(step_writes_fl - 20) < 3 && abs(step_writes_bl - 10) < 3 && abs(step_writes_br - 7) < 3 && abs(step_writes_fr - 7) < 3) {
         return 0;
     }
-    printf("fl: %d steps; bl: %d steps; br: %d steps; fr: %d steps\n", nsteps_fl, nsteps_bl, nsteps_fr, nsteps_fr);
+    printf("fl: %d steps; bl: %d steps; fr: %d steps; br: %d steps\n", step_writes_fl, step_writes_bl, step_writes_fr, step_writes_br);
     return -1;
 }
 

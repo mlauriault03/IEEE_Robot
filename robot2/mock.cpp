@@ -20,10 +20,10 @@ bool fr_direction_state;
 bool bl_direction_state;
 bool br_direction_state;
 
-int nsteps_fl = 0;
-int nsteps_fr = 0;
-int nsteps_bl = 0;
-int nsteps_br = 0;
+int step_writes_fl = 0;
+int step_writes_fr = 0;
+int step_writes_bl = 0;
+int step_writes_br = 0;
 
 
 // Functions from the Arduino library
@@ -53,10 +53,10 @@ void delayMicroseconds(unsigned int us) {
 // Custom functions
 
 void write_drive(bool fl, bool fr, bool bl, bool br, bool value) {
-  if (fl) { fl_drive_state = value; nsteps_fl++; }
-  if (bl) { bl_drive_state = value; nsteps_bl++; }
-  if (fr) { fr_drive_state = value; nsteps_fr++; }
-  if (br) { br_drive_state = value; nsteps_br++; }
+  if (fl) { fl_drive_state = value; step_writes_fl++; }
+  if (bl) { bl_drive_state = value; step_writes_bl++; }
+  if (fr) { fr_drive_state = value; step_writes_fr++; }
+  if (br) { br_drive_state = value; step_writes_br++; }
 }
 
 void update_servos() {}
