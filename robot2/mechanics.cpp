@@ -1,9 +1,13 @@
 #include "mechanics.h"
 #include "robot2.h"
-#include <cstdio>
 
 #ifdef DEBUG
+#include <cstdio>
 #include "mock.h"
+#endif
+
+#ifndef DEBUG
+#include <Arduino.h>
 #endif
 
 void drive_diff(unsigned long left_delay, unsigned long right_delay, int nsteps) {

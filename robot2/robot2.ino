@@ -3,6 +3,7 @@
 #include <pins_arduino.h>
 
 #include "robot2.h"
+#include "behaviors.h"
 
 /********************************
  ** PIN/COMPONENT DECLARATIONS **
@@ -165,12 +166,12 @@ void change_forward_side(Side side) {
   forward_side = side;
   // Move the steering servos.
   if (side == FRONT || side == BACK) {
-    turn_servos(30);
-    //move_servos(false);
+    //turn_servos(30);
+    move_servos(false);
   }
   else {
-    turn_servos(150);
-    //move_servos(true);
+    //turn_servos(150);
+    move_servos(true);
   }
   // Update stepper directions.
   switch (side) {
@@ -385,7 +386,8 @@ void setup() {
 }
 
 void loop() {
-  test_turns();
+  //FollowLine::run();
+  Tests::test_diff_drive();
   while (true) {};      // Wait forever.
 }
 

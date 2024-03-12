@@ -5,28 +5,18 @@ namespace FollowLine {
 
     int run();
 
-    enum Result { SUCCESS, LOST_LINE };
-};
+    int go_forward();
 
-namespace ForwardOnLine {
-    int run();
+    int go_left();
 
-    enum Result { SUCCESS, LOST_LINE, LEFT_OF_LINE, RIGHT_OF_LINE,
+    int go_right();
+
+    enum Status { SUCCESS, LOST_LINE, LEFT_OF_LINE, RIGHT_OF_LINE,
         END_OF_LINE };
 };
 
-namespace LeftTowardLine {
-    int run();
-
-    enum Result { SUCCESS, LOST_LINE, LEFT_OF_LINE, RIGHT_OF_LINE,
-        END_OF_LINE };
-};
-
-namespace RightTowardLine {
-    int run();
-
-    enum Result { SUCCESS, LOST_LINE, LEFT_OF_LINE, RIGHT_OF_LINE,
-        END_OF_LINE };
-};
+namespace Tests {
+    void test_diff_drive();
+}
 
 #endif
