@@ -64,7 +64,6 @@ void update_servos() {}
 void move_servos(bool turned) {
   int nsteps = (int)(0.25 * STEPS_PER_REV);
   double desired_angle = turned ? 150.0 : 30.0;
-  double angle_inc = (desired_angle - servo_angle) / (double)nsteps;
   for (int i = 0; i < nsteps; i++) {
     drive_step(true, true, true, true);
   }
