@@ -29,6 +29,9 @@ namespace FollowLine {
 
         while (true) {
             switch (status) {
+                case LOST_LINE:
+                    status = go_forward();
+                    break;
                 case SUCCESS:
                     status = go_forward();
                     break;
@@ -38,8 +41,6 @@ namespace FollowLine {
                 case RIGHT_OF_LINE:
                     status = go_left();
                     break;
-                case LOST_LINE:
-                    return LOST_LINE;
             }
         }
 
@@ -47,7 +48,7 @@ namespace FollowLine {
     }
 
     int go_forward() {
-        while (!ir_reads_black(LEFTWARD) && !ir_reads_black(RIGHTWARD)) {
+        while (ir_reads_black(LEFTWARD) == ir_reads_black(RIGHTWARD)) {
             drive_diff(MOTOR_DELAY, MOTOR_DELAY, 100);
         }
         return where_on_line();

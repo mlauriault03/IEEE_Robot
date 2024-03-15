@@ -10,6 +10,7 @@
 #include <Arduino.h>
 #endif
 
+// TODO: When called repeatedly, the motors "click" between calls because the transition isn't timed.
 void drive_diff(unsigned long left_delay, unsigned long right_delay, int nsteps) {
     unsigned long start_left = micros();
     unsigned long start_right = micros();
@@ -19,6 +20,7 @@ void drive_diff(unsigned long left_delay, unsigned long right_delay, int nsteps)
 
     bool right_state = true;
     bool left_state = true;
+
     write_drive(true, false, true, false, right_state);
     write_drive(false, true, false, true, left_state);
 
@@ -42,7 +44,4 @@ void drive_diff(unsigned long left_delay, unsigned long right_delay, int nsteps)
             start_right = micros();
         }
     }
-
-    write_drive(true, false, true, false, true);
-    write_drive(false, true, false, true, true);
 }
