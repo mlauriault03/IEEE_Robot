@@ -25,6 +25,8 @@ const unsigned int MOTOR_DELAY = 1000;
 const float pi = 3.14159265358979323846264338;
 const int TRACK = 10;
 
+extern Side forward_side;
+
 void write_drive(bool fl, bool fr, bool bl, bool br, bool value);
 void drive_step(bool fl, bool fr, bool bl, bool br);
 void move_servos(bool turned);

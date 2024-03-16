@@ -10,38 +10,48 @@
 #include <Arduino.h>
 #endif
 
-// TODO: When called repeatedly, the motors "click" between calls because the transition isn't timed.
-void drive_diff(unsigned long left_delay, unsigned long right_delay, int nsteps) {
-    unsigned long start_left = micros();
-    unsigned long start_right = micros();
+// Write to the "Left" or "Right" motors, as defined by the
+// direction the robot is driving.
+void write_drive_rel(bool leftward, bool value) {
+    bool fl, fr, bl, br;
+    // Get motors for "leftward" side.
+    switch (forward_side) {
+        case FRONT:
+            fl = true; bl = true; fr = false; br = false;
+            break;
+        case BACK:
+            fl = false; bl = false; fr = true; br = true;
+            break;
+        case LEFT:
+            fl = false; bl = true; fr = false; br = true;
+            break;
+        case RIGHT:
+            fl = true; bl = false; fr = true; br = false;
+            break;
+    }
+    if (!leftward) {
+        fl = !fl; bl = !bl; fr = !fr; br = !br;
+    }
+    write_drive(fl, fr, bl, br, value);
+}
 
-    int nsteps_right = 0;
-    int nsteps_left = 0;
+void step_in_time(bool left, unsigned long period, unsigned long &last_stepped, bool &last_write) {
+    unsigned long now = micros();
+    if (now > last_stepped && now - last_stepped >= period) {
+        last_write = !last_write;
+        write_drive_rel(left, last_write);
+        last_stepped = now;
+    }
+}
 
-    bool right_state = true;
+void diff_drive_until(unsigned long left_delay, unsigned long right_delay, bool stop_condition()) {
+    unsigned long last_step_left = micros();
+    unsigned long last_step_right = micros();
     bool left_state = true;
+    bool right_state = true;
 
-    write_drive(true, false, true, false, right_state);
-    write_drive(false, true, false, true, left_state);
-
-    while (nsteps_left < nsteps && nsteps_right < nsteps) {
-        unsigned long t_left = micros() - start_left;
-        unsigned long t_right = micros() - start_right;
-        if (t_left >= left_delay) {
-            left_state = !left_state;
-            write_drive(true, false, true, false, right_state);
-            if (left_state) {
-                nsteps_left++;
-            }
-            start_left = micros();
-        }
-        if (t_right >= right_delay) {
-            right_state = !right_state;
-            write_drive(false, true, false, true, left_state);
-            if (right_state) {
-                nsteps_right++;
-            }
-            start_right = micros();
-        }
+    while (!stop_condition()) {
+        step_in_time(true, left_delay, last_step_left, left_state);
+        step_in_time(false, right_delay, last_step_right, right_state);
     }
 }

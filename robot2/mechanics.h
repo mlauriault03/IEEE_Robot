@@ -10,4 +10,10 @@
 // nsteps: The maximum number of steps a motor will take.
 void drive_diff(unsigned long left_delay, unsigned long right_delay, int nsteps);
 
+void step_in_time(bool left, unsigned long period,
+        unsigned long &last_stepped, bool &last_write);
+
+void diff_drive_until(unsigned long left_delay,
+        unsigned long right_delay, bool stop_condition());
+
 #endif

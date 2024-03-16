@@ -22,6 +22,18 @@ namespace FollowLine {
         }
     }
 
+    bool isnt_centered() {
+        return where_on_line() != SUCCESS;
+    }
+
+    bool isnt_left_of_line() {
+        return where_on_line() != LEFT_OF_LINE;
+    }
+
+    bool isnt_right_of_line() {
+        return where_on_line() != RIGHT_OF_LINE;
+    }
+
     int run() {
         int status = SUCCESS;
 
@@ -51,20 +63,19 @@ namespace FollowLine {
         while (ir_reads_black(LEFTWARD) == ir_reads_black(RIGHTWARD)) {
             drive_diff(MOTOR_DELAY, MOTOR_DELAY, 100);
         }
+        diff_drive_until(MOTOR_DELAY, MOTOR_DELAY, isnt_centered);
         return where_on_line();
     }
 
     int go_right() {
-        while (ir_reads_black(LEFTWARD) && !ir_reads_black(RIGHTWARD)) {
-            drive_diff(MOTOR_DELAY*0.9, MOTOR_DELAY, 100);
-        }
+        diff_drive_until(MOTOR_DELAY*0.9, MOTOR_DELAY,
+                isnt_left_of_line);
         return where_on_line();
     }
 
     int go_left() {
-        while (!ir_reads_black(LEFTWARD) && ir_reads_black(RIGHTWARD)) {
-            drive_diff(MOTOR_DELAY, MOTOR_DELAY*0.9, 100);
-        }
+        diff_drive_until(MOTOR_DELAY, MOTOR_DELAY*0.9,
+                isnt_right_of_line);
         return where_on_line();
     }
 
