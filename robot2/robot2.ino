@@ -67,6 +67,10 @@ void setup_motor(int step_pin, int dir_pin) {
   digitalWrite(dir_pin, HIGH);  // May not be necessary, but it's in the old code.
 }
 
+void update_servo_dirs() {
+    // TODO
+}
+
 void setup_all_motors() {
   setup_motor(FR_DRIVE_DIR, FR_DRIVE_STEP);
   setup_motor(FL_DRIVE_DIR, FL_DRIVE_STEP);
@@ -384,7 +388,6 @@ void setup() {
   setup_all_motors();
   setup_servos();
   setup_display();
-  change_forward_side(FRONT);
 }
 
 void loop() {

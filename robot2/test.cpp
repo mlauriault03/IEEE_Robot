@@ -7,8 +7,8 @@
 #include "mechanics.h"
 #include "mock.h"
 
-#define UNIT_TEST(TESTFUNC, TESTNAME) printf("Running %s\n", (TESTNAME)); \
-    if (!(TESTFUNC())) printf("\nFailed: %s\n\n", (TESTNAME))
+#define UNIT_TEST(TESTFUNC) puts("Running " #TESTFUNC); \
+    if (!(TESTFUNC())) puts("\nFailed: " #TESTFUNC "\n")
 
 unsigned long global_time_ref = 0;
 
@@ -72,15 +72,13 @@ bool test_diff_drive_until() {
 }
 
 int main() {
-    UNIT_TEST(test_mock_wait_for_micros, "test_mock_wait_for_micros");
+    UNIT_TEST(test_mock_wait_for_micros);
 
-    UNIT_TEST(test_step_in_time_left_5writes,
-            "test_step_in_time_left_5writes");
+    UNIT_TEST(test_step_in_time_left_5writes);
 
-    UNIT_TEST(test_diff_drive_until, "test_diff_drive_until");
+    UNIT_TEST(test_diff_drive_until);
 
-    UNIT_TEST(test_step_in_time_forward_is_right,
-            "test_step_in_time_forward_is_right");
+    UNIT_TEST(test_step_in_time_forward_is_right);
 
     return 0;
 }
