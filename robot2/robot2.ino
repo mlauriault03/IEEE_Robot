@@ -67,8 +67,33 @@ void setup_motor(int step_pin, int dir_pin) {
   digitalWrite(dir_pin, HIGH);  // May not be necessary, but it's in the old code.
 }
 
-void update_servo_dirs() {
-    // TODO
+void update_stepper_dirs() {
+  switch (forward_side) {
+  case FRONT:
+    digitalWrite(FL_DRIVE_DIR, HIGH);
+    digitalWrite(FR_DRIVE_DIR, HIGH);
+    digitalWrite(BL_DRIVE_DIR, HIGH);
+    digitalWrite(BR_DRIVE_DIR, HIGH);
+    break;
+  case BACK:
+    digitalWrite(FL_DRIVE_DIR, LOW);
+    digitalWrite(FR_DRIVE_DIR, LOW);
+    digitalWrite(BL_DRIVE_DIR, LOW);
+    digitalWrite(BR_DRIVE_DIR, LOW);
+    break;
+  case LEFT:
+    digitalWrite(FL_DRIVE_DIR, LOW);
+    digitalWrite(FR_DRIVE_DIR, HIGH);
+    digitalWrite(BL_DRIVE_DIR, HIGH);
+    digitalWrite(BR_DRIVE_DIR, LOW);
+    break;
+  case RIGHT:
+    digitalWrite(FL_DRIVE_DIR, HIGH);
+    digitalWrite(FR_DRIVE_DIR, LOW);
+    digitalWrite(BL_DRIVE_DIR, LOW);
+    digitalWrite(BR_DRIVE_DIR, HIGH);
+    break;
+  }
 }
 
 void setup_all_motors() {
@@ -76,6 +101,7 @@ void setup_all_motors() {
   setup_motor(FL_DRIVE_DIR, FL_DRIVE_STEP);
   setup_motor(BR_DRIVE_DIR, BR_DRIVE_STEP);
   setup_motor(BL_DRIVE_DIR, BL_DRIVE_STEP);
+  update_stepper_dirs();
 }
 
 void setup_servos() {
@@ -179,32 +205,7 @@ void change_forward_side(Side side) {
     move_servos(true);
   }
   // Update stepper directions.
-  switch (side) {
-  case FRONT:
-    digitalWrite(FL_DRIVE_DIR, HIGH);
-    digitalWrite(FR_DRIVE_DIR, HIGH);
-    digitalWrite(BL_DRIVE_DIR, HIGH);
-    digitalWrite(BR_DRIVE_DIR, HIGH);
-    break;
-  case BACK:
-    digitalWrite(FL_DRIVE_DIR, LOW);
-    digitalWrite(FR_DRIVE_DIR, LOW);
-    digitalWrite(BL_DRIVE_DIR, LOW);
-    digitalWrite(BR_DRIVE_DIR, LOW);
-    break;
-  case LEFT:
-    digitalWrite(FL_DRIVE_DIR, LOW);
-    digitalWrite(FR_DRIVE_DIR, HIGH);
-    digitalWrite(BL_DRIVE_DIR, HIGH);
-    digitalWrite(BR_DRIVE_DIR, LOW);
-    break;
-  case RIGHT:
-    digitalWrite(FL_DRIVE_DIR, HIGH);
-    digitalWrite(FR_DRIVE_DIR, LOW);
-    digitalWrite(BL_DRIVE_DIR, LOW);
-    digitalWrite(BR_DRIVE_DIR, HIGH);
-    break;
-  }
+  update_stepper_dirs();
 }
 
 bool ir_reads_black(Direction sensor_direction) {
@@ -219,113 +220,6 @@ bool ir_reads_black(Direction sensor_direction) {
     case 270:
       return analogRead(RIGHT_IR_PIN) > 600;
   }
-}
-
-
-// Turn both servos 90 Degrees
-void turn_servos(int degree) {
-  if (servo_angle <= degree) {
-    float rotation_fraction = (float) (degree - servo_angle)/360;                    //Fraction of a full circle to rotate
-
-    bool old_DIR_FL = digitalRead(FL_DRIVE_DIR);
-    digitalWrite(FL_DRIVE_DIR, LOW);
-    bool old_DIR_BR = digitalRead(BR_DRIVE_DIR);
-    digitalWrite(BR_DRIVE_DIR, HIGH);
-    bool old_DIR_FR = digitalRead(FR_DRIVE_DIR);
-    digitalWrite(FR_DRIVE_DIR, LOW);
-    bool old_DIR_BL = digitalRead(BL_DRIVE_DIR);
-    digitalWrite(BL_DRIVE_DIR, HIGH);
-    
-
-    unsigned long turn_steps = (unsigned long) STEP_MODE * 200 * 5.18 * rotation_fraction;             //Fraction of rotation times steps per rotation
-    float angle_increment = (float) (360 * rotation_fraction)/turn_steps;
-  
-    digitalWrite(FR_DRIVE_STEP, HIGH);
-    digitalWrite(BL_DRIVE_STEP, HIGH);
-
-    digitalWrite(FL_DRIVE_STEP, HIGH);
-    digitalWrite(BR_DRIVE_STEP, HIGH);
-
-    for (unsigned long x = 0; x < turn_steps; x++) {
-      digitalWrite(FR_DRIVE_STEP, HIGH);
-      digitalWrite(BL_DRIVE_STEP, HIGH);
-      delayMicroseconds(MOTOR_DELAY);                            //Was a 500 ms delay
-      digitalWrite(FR_DRIVE_STEP, LOW);
-      digitalWrite(BL_DRIVE_STEP, LOW);
-      delayMicroseconds(MOTOR_DELAY); 
-      BL_SERVO.write(180 - int(servo_angle + x * angle_increment));
-      FR_SERVO.write(180 - int(servo_angle + x * angle_increment));
-    }
-
-    for (unsigned long x = 0; x < turn_steps; x++) {
-      digitalWrite(FL_DRIVE_STEP, HIGH);
-      digitalWrite(BR_DRIVE_STEP, HIGH);
-      delayMicroseconds(MOTOR_DELAY);                            //Was a 500 ms delay
-      digitalWrite(FL_DRIVE_STEP, LOW);
-      digitalWrite(BR_DRIVE_STEP, LOW);
-      delayMicroseconds(MOTOR_DELAY); 
-      BR_SERVO.write(int(servo_angle + x * angle_increment));
-      FL_SERVO.write(int(servo_angle + x * angle_increment));
-    }
-  
-    digitalWrite(FL_DRIVE_DIR, old_DIR_FL);
-    digitalWrite(BR_DRIVE_DIR, old_DIR_BR);
-    digitalWrite(FR_DRIVE_DIR, old_DIR_FR);
-    digitalWrite(BL_DRIVE_DIR, old_DIR_BL);
-  }
-  else {
-    float rotation_fraction = (float) (servo_angle - degree)/360;                    //Fraction of a full circle to rotate
-
-    bool old_DIR_FL = digitalRead(FL_DRIVE_DIR);
-    digitalWrite(FL_DRIVE_DIR, HIGH);
-    bool old_DIR_BR = digitalRead(BR_DRIVE_DIR);
-    digitalWrite(BR_DRIVE_DIR, LOW);
-    bool old_DIR_FR = digitalRead(FR_DRIVE_DIR);
-    digitalWrite(FR_DRIVE_DIR, HIGH);
-    bool old_DIR_BL = digitalRead(BL_DRIVE_DIR);
-    digitalWrite(BL_DRIVE_DIR, LOW);
-    
-    unsigned long turn_steps = (unsigned long) STEP_MODE * 200 * 5.18 * rotation_fraction;            //Fraction of rotation times steps per rotation
-    float angle_increment = (float) (360 * rotation_fraction)/turn_steps;
-  
-    digitalWrite(FR_DRIVE_STEP, HIGH);
-    digitalWrite(BL_DRIVE_STEP, HIGH);
-
-    for (unsigned long x = 0; x < turn_steps; x++) {
-      digitalWrite(FL_DRIVE_STEP, HIGH);
-      digitalWrite(BR_DRIVE_STEP, HIGH);
-      delayMicroseconds(MOTOR_DELAY);                            //Was a 500 ms delay
-      digitalWrite(FL_DRIVE_STEP, LOW);
-      digitalWrite(BR_DRIVE_STEP, LOW);
-      delayMicroseconds(MOTOR_DELAY); 
-      FL_SERVO.write(180 - servo_angle + int((turn_steps - x) * angle_increment));
-      BR_SERVO.write(180 - servo_angle + int((turn_steps - x) * angle_increment));
-    }
-  
-    digitalWrite(FL_DRIVE_STEP, HIGH);
-    digitalWrite(BR_DRIVE_STEP, HIGH);
-
-    for (unsigned long x = 0; x < turn_steps; x++) {
-      digitalWrite(FR_DRIVE_STEP, HIGH);
-      digitalWrite(BL_DRIVE_STEP, HIGH);
-      delayMicroseconds(MOTOR_DELAY);                            //was a 500 ms delay
-      digitalWrite(FR_DRIVE_STEP, LOW);
-      digitalWrite(BL_DRIVE_STEP, LOW);
-      delayMicroseconds(MOTOR_DELAY); 
-      FR_SERVO.write(180 - servo_angle + x * angle_increment);
-      BL_SERVO.write(180 - servo_angle + x * angle_increment);
-    }
-    digitalWrite(FL_DRIVE_DIR, old_DIR_FL);
-    digitalWrite(BR_DRIVE_DIR, old_DIR_BR);
-    digitalWrite(FR_DRIVE_DIR, old_DIR_FR);
-    digitalWrite(BL_DRIVE_DIR, old_DIR_BL);
-  }
-  
-  FL_SERVO.write(degree);
-  BR_SERVO.write(degree);
-  FR_SERVO.write(180 - degree);
-  BL_SERVO.write(180 - degree);
-  servo_angle = degree;
 }
 
 /*******************************
