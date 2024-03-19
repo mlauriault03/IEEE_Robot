@@ -1,8 +1,27 @@
+#include <Arduino.h>
+
 #include "behaviors.h"
 #include "robot2.h"
 #include "mechanics.h"
 
+class Timer {
+    unsigned int duration;
+    unsigned long start;
+
+    public:
+
+    Timer(unsigned int us) : duration(us) {
+        start = micros();
+    };
+
+    bool is_done() {
+        return micros() - start >= duration;
+    }
+};
+
 namespace FollowLine {
+
+    Timer stop_timer(0);
 
     int where_on_line() {
         bool see_right = !ir_reads_black(RIGHTWARD);
@@ -22,24 +41,11 @@ namespace FollowLine {
         }
     }
 
-    bool isnt_centered() {
-        return where_on_line() != SUCCESS;
-    }
+    int run(double cm) {
+        stop_timer = Timer(cm * STEPS_PER_CM * 2 * MOTOR_DELAY);
+        int status = where_on_line();
 
-    bool isnt_left_of_line() {
-        return where_on_line() != LEFT_OF_LINE;
-    }
-
-    bool isnt_right_of_line() {
-        return where_on_line() != RIGHT_OF_LINE;
-    }
-
-    int run() {
-        int status = SUCCESS;
-
-        status = where_on_line();
-
-        while (true) {
+        while (!stop_timer.is_done()) {
             switch (status) {
                 case LOST_LINE:
                     status = go_forward();
@@ -59,26 +65,43 @@ namespace FollowLine {
         return status;
     }
 
+    bool stop_forward() {
+        return stop_timer.is_done() || where_on_line() != SUCCESS;
+    }
+
+    bool stop_right() {
+        return stop_timer.is_done() || where_on_line() != RIGHT_OF_LINE;
+    }
+
+    bool stop_left() {
+        return stop_timer.is_done() || where_on_line() != LEFT_OF_LINE;
+    }
+
     int go_forward() {
-        while (ir_reads_black(LEFTWARD) == ir_reads_black(RIGHTWARD)) {
-            drive_diff(MOTOR_DELAY, MOTOR_DELAY, 100);
-        }
-        diff_drive_until(MOTOR_DELAY, MOTOR_DELAY, isnt_centered);
+        diff_drive_until(MOTOR_DELAY, MOTOR_DELAY, stop_forward);
         return where_on_line();
     }
 
     int go_right() {
-        diff_drive_until(MOTOR_DELAY*0.9, MOTOR_DELAY,
-                isnt_left_of_line);
+        diff_drive_until(MOTOR_DELAY*0.9, MOTOR_DELAY, stop_right);
         return where_on_line();
     }
 
     int go_left() {
-        diff_drive_until(MOTOR_DELAY, MOTOR_DELAY*0.9,
-                isnt_right_of_line);
+        diff_drive_until(MOTOR_DELAY, MOTOR_DELAY*0.9, stop_left);
         return where_on_line();
     }
 
+}
+
+namespace Course {
+    void run() {
+        FollowLine::run(194.6275);
+        change_forward_side(LEFT);
+        FollowLine::run(60.96);
+        change_forward_side(BACK);
+        FollowLine::run(81.25);
+    }
 }
 
 namespace Tests {

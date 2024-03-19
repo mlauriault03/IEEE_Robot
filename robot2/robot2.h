@@ -21,6 +21,7 @@ const int STEP_MODE = 1;        // microsteps/step  1 is full-step mode
 // 200 steps/rev | 5.18 motor rev/wheel revolution based on observation
 const double STEPS_PER_REV = 200 * 5.18 * STEP_MODE;
 const double STEPS_PER_INCH = 82.4;
+const double STEPS_PER_CM = 32.457;
 const unsigned int MOTOR_DELAY = 1000;
 const float pi = 3.14159265358979323846264338;
 const int TRACK = 10;

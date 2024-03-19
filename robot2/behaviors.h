@@ -19,4 +19,8 @@ namespace Tests {
     void test_diff_drive();
 }
 
+namespace Course {
+    void run();
+}
+
 #endif

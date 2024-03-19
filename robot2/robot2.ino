@@ -285,8 +285,7 @@ void setup() {
 }
 
 void loop() {
-  FollowLine::run();
-  //Tests::test_diff_drive();
+  Course::run();
   while (true) {};      // Wait forever.
 }
 
