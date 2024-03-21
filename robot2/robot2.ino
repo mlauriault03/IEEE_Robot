@@ -285,8 +285,7 @@ void setup() {
 }
 
 void loop() {
-  FollowLine::run(194.6275);
-  //Course::run();
+  Course::run();
   while (true) {};      // Wait forever.
 }
 
