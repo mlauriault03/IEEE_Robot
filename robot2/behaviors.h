@@ -3,7 +3,7 @@
 
 namespace FollowLine {
 
-    int run();
+    int run(double cm);
 
     int go_forward();
 
