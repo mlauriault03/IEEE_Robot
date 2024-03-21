@@ -11,8 +11,7 @@ namespace FollowLine {
 
     int go_right();
 
-    enum Status { SUCCESS, LOST_LINE, LEFT_OF_LINE, RIGHT_OF_LINE,
-        END_OF_LINE };
+    enum Status { SUCCESS, LOST_LINE, LEFT_OF_LINE, RIGHT_OF_LINE };
 };
 
 namespace Tests {
