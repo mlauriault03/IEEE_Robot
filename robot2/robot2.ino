@@ -202,6 +202,7 @@ void move_servos(bool turned) {
     current_angle += angle_inc;
     servo_angle = current_angle;
     drive_step(true, true, true, true);   // Moves steppers and servos.
+    delay(5);
   }
   servo_angle = desired_angle;  // Make sure we have the right angle.
 }
