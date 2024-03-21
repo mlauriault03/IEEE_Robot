@@ -21,7 +21,7 @@ class Timer {
 
 namespace FollowLine {
 
-    Timer stop_timer(0);
+    Timer stop_timer(10000000);
 
     int where_on_line() {
         bool see_right = !ir_reads_black(RIGHTWARD);
