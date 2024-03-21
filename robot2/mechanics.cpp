@@ -50,8 +50,11 @@ void diff_drive_until(unsigned long left_delay, unsigned long right_delay, bool 
     bool left_state = true;
     bool right_state = true;
 
-    while (!stop_condition()) {
+    int min_steps = 100;
+
+    while (!stop_condition() || min_steps > 0) {
         step_in_time(true, left_delay, last_step_left, left_state);
         step_in_time(false, right_delay, last_step_right, right_state);
+        min_steps--;
     }
 }
