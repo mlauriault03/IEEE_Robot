@@ -21,7 +21,7 @@ class Timer {
 
 namespace FollowLine {
 
-    Timer stop_timer(0);
+    Timer stop_timer(10000000);
 
     int where_on_line() {
         bool see_right = !ir_reads_black(RIGHTWARD);
@@ -42,7 +42,7 @@ namespace FollowLine {
     }
 
     int run(double cm) {
-        stop_timer = Timer(cm * STEPS_PER_CM * 2 * MOTOR_DELAY);
+        //stop_timer = Timer(cm * STEPS_PER_CM * 2 * MOTOR_DELAY);
         int status = where_on_line();
 
         while (!stop_timer.is_done()) {
