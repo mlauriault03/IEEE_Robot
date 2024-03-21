@@ -5,12 +5,12 @@
 #include "mechanics.h"
 
 class Timer {
-    unsigned int duration;
+    unsigned long duration;
     unsigned long start;
 
     public:
 
-    Timer(unsigned int us) : duration(us) {
+    Timer(unsigned long us) : duration(us) {
         start = micros();
     };
 
@@ -43,6 +43,7 @@ namespace FollowLine {
 
     int run(double cm) {
         //stop_timer = Timer(cm * STEPS_PER_CM * 2 * MOTOR_DELAY);
+        stop_timer(100000000000);
         int status = where_on_line();
 
         while (!stop_timer.is_done()) {
