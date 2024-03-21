@@ -42,7 +42,7 @@ namespace FollowLine {
     }
 
     int run(double cm) {
-        stop_timer = Timer(cm * STEPS_PER_CM * 2 * MOTOR_DELAY);
+        //stop_timer = Timer(cm * STEPS_PER_CM * 2 * MOTOR_DELAY);
         int status = where_on_line();
 
         while (!stop_timer.is_done()) {
