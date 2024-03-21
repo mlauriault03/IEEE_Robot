@@ -25,6 +25,12 @@ Servo FL_SERVO;
 Servo BR_SERVO;
 Servo BL_SERVO;
 
+Servo right_bridge_servo;
+Servo left_bridge_servo;
+
+Servo left_plow_servo;
+Servo right_plow_servo;
+
 const int BACK_IR_PIN = A1;
 const int LEFT_IR_PIN = A2;
 const int RIGHT_IR_PIN = A3;
@@ -55,6 +61,7 @@ const int round_complete_LED = 46;
  ********** GLOBALS ***********
 *******************************/
 int servo_angle = 30;
+bool bridge_deployed = false;
 Side forward_side = FRONT;
 
 /******************************
@@ -156,6 +163,14 @@ void update_servos() {
   BR_SERVO.write(servo_angle);
   FR_SERVO.write(180 - servo_angle);
   BL_SERVO.write(180 - servo_angle);
+
+  if (bridge_deployed) {
+    left_bridge_servo.write(0);
+    right_bridge_servo.write(180);
+  } else {
+    left_bridge_servo.write(180);
+    right_bridge_servo.write(0);
+  }
 }
 
 // Move steering servos to the normal or turned position.
@@ -206,6 +221,7 @@ void change_forward_side(Side side) {
   }
   // Update stepper directions.
   update_stepper_dirs();
+  delay(500);
 }
 
 bool ir_reads_black(Direction sensor_direction) {
@@ -269,8 +285,13 @@ void test_turns() {
   change_forward_side(FRONT);
 }
 
-void test_plow() {
-  // Move the plow up and down.
+void test_bridge() {
+  for (int i = 0; i < 1000; i++) {
+    drive_step(true, true, true, true);
+  }
+  delay(2000);
+  bridge_deployed = true;
+  update_servos();
 }
 
 /*******************************

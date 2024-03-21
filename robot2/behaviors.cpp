@@ -101,6 +101,7 @@ namespace Course {
         FollowLine::run(60.96);
         change_forward_side(BACK);
         FollowLine::run(81.25);
+        delay(500);
     }
 }
 
