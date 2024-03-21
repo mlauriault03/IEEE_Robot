@@ -15,7 +15,8 @@ class Timer {
     };
 
     bool is_done() {
-        return micros() - start >= duration;
+        return false;
+        //return micros() - start >= duration;
     }
 };
 
