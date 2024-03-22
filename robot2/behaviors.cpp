@@ -96,12 +96,35 @@ namespace FollowLine {
 
 namespace Course {
     void run() {
+        // Navigate to the chasm.
         FollowLine::run(194.6275);
         change_forward_side(LEFT);
         FollowLine::run(60.96);
         change_forward_side(BACK);
         FollowLine::run(81.25);
+
+        // Deploy the bridge.
         delay(500);
+        deploy_bridge();
+        delay(30000);
+
+        // Back up, then move forward (why do we do this?)
+        change_forward_side(BACK);
+        FollowLine::run(10);
+        delay(100);
+        change_forward_side(FRONT);
+        FollowLine::run(10);
+        delay(100);
+        
+        // Drive accross the bridge.
+        FollowLine::run(53.34 + 48.26+15);
+
+        // Push the button.
+        change_forward_side(RIGHT);
+        FollowLine::run(10);
+        delay(100);
+        change_forward_side(LEFT);
+        FollowLine::run(2);
     }
 }
 

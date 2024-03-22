@@ -14,7 +14,7 @@ enum Side {FRONT=0, LEFT=90, BACK=180, RIGHT=270};
 // FORWARD is the direction we are currently driving, and the
 // other directions are defined accordingly.
 //
-// Values represent degress coutnerclockwise from FORWARD.
+// Values represent degress counterclockwise from FORWARD.
 enum Direction {FORWARD=0, LEFTWARD=90, BACKWARD=180, RIGHTWARD=270};
 
 const int STEP_MODE = 1;        // microsteps/step  1 is full-step mode
@@ -33,5 +33,6 @@ void drive_step(bool fl, bool fr, bool bl, bool br);
 void move_servos(bool turned);
 void change_forward_side(Side side);
 bool ir_reads_black(Direction sensor_direction);
+void deploy_bridge();
 
 #endif

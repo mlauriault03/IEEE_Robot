@@ -173,6 +173,11 @@ void update_servos() {
   }
 }
 
+void deploy_bridge() {
+  bridge_deployed = true;
+  update_servos();
+}
+
 // Move steering servos to the normal or turned position.
 //
 // NOTE: This chnages the stepper directions as a side effect.
