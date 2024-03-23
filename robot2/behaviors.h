@@ -2,8 +2,10 @@
 #define IGVC2024_BEHAVIORS_402732
 
 namespace FollowLine {
+    
+    void pass();
 
-    int run(double cm);
+    int run(double cm, void on_step() = pass);
 
     int go_forward();
 

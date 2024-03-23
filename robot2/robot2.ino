@@ -23,8 +23,8 @@ const int FR_SERVO_PIN = 5;
 const int R_PLOW_SERVO_PIN = 6;
 const int L_PLOW_SERVO_PIN = 7;
 
-const int L_BRIDGE_SERVO_PIN = 9;
 const int R_BRIDGE_SERVO_PIN = 8;
+const int L_BRIDGE_SERVO_PIN = 9;
 
 Servo FR_SERVO;
 Servo FL_SERVO;
@@ -69,6 +69,7 @@ const int round_complete_LED = 46;
 int servo_angle = 30;
 bool bridge_deployed = false;
 Side forward_side = FRONT;
+double plow_angle = 150;
 
 /******************************
  ****** SETUP FUNCTIONS *******
@@ -176,6 +177,9 @@ void update_servos() {
   BR_SERVO.write(servo_angle);
   FR_SERVO.write(180 - servo_angle);
   BL_SERVO.write(180 - servo_angle);
+
+  right_plow_servo.write(plow_angle);
+  left_plow_servo.write(180 - plow_angle);
 
   if (bridge_deployed) {
     left_bridge_servo.write(0);

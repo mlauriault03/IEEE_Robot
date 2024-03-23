@@ -28,11 +28,17 @@ const int TRACK = 10;
 
 extern Side forward_side;
 
+// Sets the angle for the plow servos
+// 0 degrees = level with the ground.
+// All slopes are 22.5 degrees.
+extern double plow_angle;
+
 void write_drive(bool fl, bool fr, bool bl, bool br, bool value);
 void drive_step(bool fl, bool fr, bool bl, bool br);
 void move_servos(bool turned);
 void change_forward_side(Side side);
 bool ir_reads_black(Direction sensor_direction);
 void deploy_bridge();
+void set_plow_angle(int degrees);
 
 #endif
