@@ -19,7 +19,7 @@ namespace Tests {
 }
 
 namespace Course {
-    void run();
+    void run_basic();
 }
 
 #endif

@@ -83,19 +83,19 @@ namespace FollowLine {
     }
 
     int go_right() {
-        diff_drive_until(MOTOR_DELAY*0.9, MOTOR_DELAY, stop_right);
+        diff_drive_until(MOTOR_DELAY*0.85, MOTOR_DELAY, stop_right);
         return where_on_line();
     }
 
     int go_left() {
-        diff_drive_until(MOTOR_DELAY, MOTOR_DELAY*0.9, stop_left);
+        diff_drive_until(MOTOR_DELAY, MOTOR_DELAY*0.85, stop_left);
         return where_on_line();
     }
 
 }
 
 namespace Course {
-    void run() {
+    void run_basic() {
         // Navigate to the chasm.
         FollowLine::run(194.6275);
         change_forward_side(LEFT);
@@ -129,8 +129,16 @@ namespace Course {
 }
 
 namespace Tests {
+    Timer timer(0);
+
+    bool timerIsDone() {
+        return timer.is_done();
+    }
+    
     void test_diff_drive() {
-        drive_diff(MOTOR_DELAY, MOTOR_DELAY*1.2, 1000);
-        drive_diff(MOTOR_DELAY*1.2, MOTOR_DELAY, 1000);
+        timer = Timer(1000000);
+        diff_drive_until(MOTOR_DELAY*0.85, MOTOR_DELAY, timerIsDone);  // Drive right
+        timer = Timer(1000000);
+        diff_drive_until(MOTOR_DELAY, MOTOR_DELAY*0.85, timerIsDone);  // Drive left
     }
 }

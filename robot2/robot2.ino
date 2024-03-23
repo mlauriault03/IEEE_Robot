@@ -20,6 +20,12 @@ const int BL_SERVO_PIN = 3;
 const int FL_SERVO_PIN = 4;
 const int FR_SERVO_PIN = 5;
 
+const int R_PLOW_SERVO_PIN = 6;
+const int L_PLOW_SERVO_PIN = 7;
+
+const int L_BRIDGE_SERVO_PIN = 9;
+const int R_BRIDGE_SERVO_PIN = 8;
+
 Servo FR_SERVO;
 Servo FL_SERVO;
 Servo BR_SERVO;
@@ -116,6 +122,13 @@ void setup_servos() {
   FL_SERVO.attach(FL_SERVO_PIN, 500, 2500);     //MG996R - 500 to 2500
   BR_SERVO.attach(BR_SERVO_PIN, 500, 2500);     //MG996R - 500 to 2500
   BL_SERVO.attach(BL_SERVO_PIN, 500, 2500);     //MG996R - 500 to 2500
+
+  left_plow_servo.attach(L_PLOW_SERVO_PIN, 500, 2500);
+  right_plow_servo.attach(R_PLOW_SERVO_PIN, 500, 2500);
+
+  left_bridge_servo.attach(L_BRIDGE_SERVO_PIN, 500, 2500);
+  right_bridge_servo.attach(R_BRIDGE_SERVO_PIN, 500, 2500);
+
   update_servos();
 }
 
@@ -312,7 +325,9 @@ void setup() {
 }
 
 void loop() {
-  Course::run();
+  test_turns();
+  // Tests::test_diff_drive();
+  // Course::run_basic();
   while (true) {};      // Wait forever.
 }
 
